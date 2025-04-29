@@ -36,7 +36,7 @@ namespace Tests.Integration
             var accountDto = JsonConvert.DeserializeObject<AccountDto>(responseContent);
 
             Assert.NotNull(accountDto);
-            Assert.NotEqual(default, accountDto.Id);
+            Assert.NotEqual(Guid.Empty, accountDto.Id);
             Assert.Equal("John Doe", accountDto.Name);
             Assert.Equal("john.doe@gmail.com", accountDto.Email);
             Assert.Equal("97456321558", accountDto.Document);

@@ -28,7 +28,7 @@ namespace API.Validators
                 .WithMessage("Invalid password");
         }
 
-        private bool ValidateDocument(string? document)
+        private static bool ValidateDocument(string? document)
         {
             const int VALID_LENGTH = 11;
 
@@ -54,20 +54,20 @@ namespace API.Validators
             return ExtractDigit(document).Equals($"{digit1}{digit2}");
         }
 
-        private string CleanDocument(string document)
+        private static string CleanDocument(string document)
         {
             return document.Trim()
                 .Replace(".", "")
                 .Replace("-", "");  
         }
 
-        private bool AllDigitsEqual(string document)
+        private static bool AllDigitsEqual(string document)
         {
             var firstDigit = document[0];
             return document.All(digit => digit.Equals(firstDigit));
         }
 
-        private int CalculateDigit(string document, int factor)
+        private static int CalculateDigit(string document, int factor)
         {
             var total = 0;
             foreach (var digit in document)
@@ -82,7 +82,7 @@ namespace API.Validators
             return (rest < 2) ? 0 : 11 - rest;
         }
 
-        private string ExtractDigit(string document)
+        private static string ExtractDigit(string document)
         {
             return document.Substring(document.Length - 2, 2);
         }
