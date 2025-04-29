@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -7,7 +8,7 @@ namespace API.Controllers
     public class SignUpController : ControllerBase
     {
         [HttpPost]
-        public IActionResult SignUp()
+        public IActionResult SignUp([FromBody] SignUpDto signUpDto)
         {
             return Ok();
         }
