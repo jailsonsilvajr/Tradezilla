@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using DatabaseContext;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +10,16 @@ namespace API.Controllers
     public class SignUpController : ControllerBase
     {
         private readonly IValidator<SignUpDto> _signUpDtoValidator;
+        private readonly Context _context;
 
-        public SignUpController(IValidator<SignUpDto> signUpDtoValidator)
+        public SignUpController(IValidator<SignUpDto> signUpDtoValidator, Context context)
         {
             _signUpDtoValidator = signUpDtoValidator;
+            _context = context;
         }
 
         [HttpPost]
-        public IActionResult SignUp([FromBody] SignUpDto signUpDto)
+        public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto)
         {
             var validationResult = _signUpDtoValidator.Validate(signUpDto);
             if (!validationResult.IsValid)
@@ -29,14 +32,23 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new AccountDto
+            var accountDto = new AccountDto
             {
                 Id = Guid.NewGuid(),
-                Name = signUpDto.Name!,
-                Email = signUpDto.Email!,
-                Document = signUpDto.Document!,
-                Password = signUpDto.Password!
-            });
+                Name = signUpDto.Name,
+                Email = signUpDto.Email,
+                Document = signUpDto.Document,
+                Password = signUpDto.Password
+            };
+
+            await _context.InsertAccountAsync(
+                accountDto.Id, 
+                accountDto.Name!, 
+                accountDto.Email!, 
+                accountDto.Document!, 
+                accountDto.Password!);
+
+            return Ok(accountDto);
         }
     }
 }
