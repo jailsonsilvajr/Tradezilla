@@ -45,7 +45,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task SignUp_ReturnsBadRequest_WhenInvalidData()
+        public async Task ShouldNotCreateAnAccountWithAnInvalidData()
         {
             var requestUri = "/api/signup";
             var json = JsonConvert.SerializeObject(new {});
@@ -133,6 +133,30 @@ namespace Tests.Integration
 
             Assert.NotNull(errorResponseDto);
             Assert.Contains("Invalid document", errorResponseDto.ErrorMessages);
+        }
+
+        [Fact]
+        public async Task ShouldNotCreateAnAccountWithAnInvalidPassword()
+        {
+            var json = JsonConvert.SerializeObject(new
+            {
+                Name = "John Doe",
+                Email = "john.doe@gmail.com",
+                Document = "97456321558",
+                Password = "asdQWE"
+            });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync("/api/signup", content);
+
+            Assert.NotNull(response);
+            Assert.Equal(422, (int)response.StatusCode);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
+
+            Assert.NotNull(errorResponseDto);
+            Assert.Contains("Invalid password", errorResponseDto.ErrorMessages);
         }
     }
 }
