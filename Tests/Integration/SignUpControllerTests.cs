@@ -78,5 +78,28 @@ namespace Tests.Integration
             Assert.NotNull(errorResponseDto);
             Assert.Contains("Invalid name", errorResponseDto.ErrorMessages);
         }
+
+        [Fact]
+        public async Task ShouldNotCreateAnAccountWithAnNullName()
+        {
+            var json = JsonConvert.SerializeObject(new
+            {
+                Email = "john.doe@gmail.com",
+                Document = "97456321558",
+                Password = "asdQWE123"
+            });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync("/api/signup", content);
+
+            Assert.NotNull(response);
+            Assert.Equal(422, (int)response.StatusCode);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
+
+            Assert.NotNull(errorResponseDto);
+            Assert.Contains("Name can't be null", errorResponseDto.ErrorMessages);
+        }
     }
 }

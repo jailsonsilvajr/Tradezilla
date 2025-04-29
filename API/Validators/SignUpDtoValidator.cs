@@ -8,8 +8,8 @@ namespace API.Validators
         public SignUpDtoValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .WithMessage("Name is required")
+                .NotNull()
+                .WithMessage("Name can't be null")
                 .Matches(@"[a-zA-Z] [a-zA-Z]+")
                 .WithMessage("Invalid name");
         }
