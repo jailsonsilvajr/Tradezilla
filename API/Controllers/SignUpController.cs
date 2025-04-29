@@ -31,7 +31,7 @@ namespace API.Controllers
             return Ok(new AccountDto
             {
                 Id = Guid.NewGuid(),
-                Name = signUpDto.Name,
+                Name = signUpDto.Name!,
                 Email = signUpDto.Email,
                 Document = signUpDto.Document,
                 Password = signUpDto.Password
