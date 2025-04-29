@@ -52,15 +52,17 @@ namespace Tests.Integration
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _client.PostAsync(requestUri, content);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(422, (int)response.StatusCode);
         }
 
-        [Fact]
-        public async Task ShouldNotCreateAnAccountWithAnInvalidName()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("John")]
+        public async Task ShouldNotCreateAnAccountWithAnInvalidName(string? name)
         {
             var json = JsonConvert.SerializeObject(new
             {
-                Name = "John",
+                Name = name,
                 Email = "john.doe@gmail.com",
                 Document = "97456321558",
                 Password = "asdQWE123"
@@ -79,13 +81,15 @@ namespace Tests.Integration
             Assert.Contains("Invalid name", errorResponseDto.ErrorMessages);
         }
 
-        [Fact]
-        public async Task ShouldNotCreateAnAccountWithAnInvalidEmail()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("john.doe")]
+        public async Task ShouldNotCreateAnAccountWithAnInvalidEmail(string? email)
         {
             var json = JsonConvert.SerializeObject(new
             {
                 Name = "John Doe",
-                Email = "john.doe",
+                Email = email,
                 Document = "97456321558",
                 Password = "asdQWE123"
             });

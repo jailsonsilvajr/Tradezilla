@@ -33,9 +33,9 @@ namespace API.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = signUpDto.Name!,
-                Email = signUpDto.Email,
-                Document = signUpDto.Document,
-                Password = signUpDto.Password
+                Email = signUpDto.Email!,
+                Document = signUpDto.Document!,
+                Password = signUpDto.Password!
             });
         }
     }
