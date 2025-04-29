@@ -11,6 +11,10 @@ namespace API.Validators
             RuleFor(x => x.Name)
                 .Must(name => !string.IsNullOrEmpty(name) && Regex.IsMatch(name, @"[a-zA-Z] [a-zA-Z]+"))
                 .WithMessage("Invalid name");
+
+            RuleFor(x => x.Email)
+                .Must(email => !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^(.+)\@(.+)$"))
+                .WithMessage("Invalid email");
         }
     }
 }
