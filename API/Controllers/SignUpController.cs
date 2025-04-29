@@ -1,5 +1,5 @@
 ﻿using API.DTOs;
-using API.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,10 +8,11 @@ namespace API.Controllers
     [ApiController]
     public class SignUpController : ControllerBase
     {
-        private readonly SignUpDtoValidator _signUpDtoValidator;
-        public SignUpController()
+        private readonly IValidator<SignUpDto> _signUpDtoValidator;
+
+        public SignUpController(IValidator<SignUpDto> signUpDtoValidator)
         {
-            _signUpDtoValidator = new SignUpDtoValidator();
+            _signUpDtoValidator = signUpDtoValidator;
         }
 
         [HttpPost]

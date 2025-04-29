@@ -1,4 +1,10 @@
+using API.DTOs;
+using API.Validators;
+using FluentValidation;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IValidator<SignUpDto>, SignUpDtoValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
