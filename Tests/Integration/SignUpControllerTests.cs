@@ -1,6 +1,5 @@
 ﻿using API.DTOs;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text;
 
@@ -16,7 +15,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task SignUp_ReturnsOk()
+        public async Task MustCreateAValidAccount()
         {
             var requestUri = "/api/signup";
             var json = JsonConvert.SerializeObject(new 
@@ -30,7 +29,18 @@ namespace Tests.Integration
 
             var response = await _client.PostAsync(requestUri, content);
 
+            Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var accountDto = JsonConvert.DeserializeObject<AccountDto>(responseContent);
+
+            Assert.NotNull(accountDto);
+            Assert.NotEqual(default, accountDto.Id);
+            Assert.Equal("John Doe", accountDto.Name);
+            Assert.Equal("john.doe@gmail.com", accountDto.Email);
+            Assert.Equal("97456321558", accountDto.Document);
+            Assert.Equal("asdQWE123", accountDto.Password);
         }
 
         [Fact]

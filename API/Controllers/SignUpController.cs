@@ -10,7 +10,14 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult SignUp([FromBody] SignUpDto signUpDto)
         {
-            return Ok();
+            return Ok(new AccountDto
+            {
+                Id = Guid.NewGuid(),
+                Name = signUpDto.Name,
+                Email = signUpDto.Email,
+                Document = signUpDto.Document,
+                Password = signUpDto.Password
+            });
         }
     }
 }
