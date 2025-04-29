@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace API.Validators
 {
@@ -8,9 +9,7 @@ namespace API.Validators
         public SignUpDtoValidator()
         {
             RuleFor(x => x.Name)
-                .NotNull()
-                .WithMessage("Name can't be null")
-                .Matches(@"[a-zA-Z] [a-zA-Z]+")
+                .Must(name => !string.IsNullOrEmpty(name) && Regex.IsMatch(name, @"[a-zA-Z] [a-zA-Z]+"))
                 .WithMessage("Invalid name");
         }
     }
