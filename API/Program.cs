@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
-builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IValidator<SignUpDto>, SignUpDtoValidator>();
 

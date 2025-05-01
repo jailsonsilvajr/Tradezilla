@@ -10,9 +10,9 @@ namespace API.Controllers
     public class SignUpController : ControllerBase
     {
         private readonly IValidator<SignUpDto> _signUpDtoValidator;
-        private readonly Context _context;
+        private readonly TradezillaContext _context;
 
-        public SignUpController(IValidator<SignUpDto> signUpDtoValidator, Context context)
+        public SignUpController(IValidator<SignUpDto> signUpDtoValidator, TradezillaContext context)
         {
             _signUpDtoValidator = signUpDtoValidator;
             _context = context;
