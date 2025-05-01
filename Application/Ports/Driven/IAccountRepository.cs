@@ -4,6 +4,6 @@ namespace Application.Ports.Driven
 {
     public interface IAccountRepository
     {
-        Task RegisterAccountAsync(Account account);
+        void RegisterAccount(Account account);
     }
 }

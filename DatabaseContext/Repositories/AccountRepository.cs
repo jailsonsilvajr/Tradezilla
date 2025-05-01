@@ -12,9 +12,9 @@ namespace DatabaseContext.Repositories
             _context = context;
         }
 
-        public Task RegisterAccountAsync(Account account)
+        public void RegisterAccount(Account account)
         {
-            throw new NotImplementedException();
+            _context.Accounts.Add(account);
         }
     }
 }
