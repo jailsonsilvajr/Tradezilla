@@ -1,12 +1,12 @@
 ﻿using DatabaseContext.Config;
-using DatabaseContext.Models;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseContext
 {
     public class TradezillaContext : DbContext
     {
-        public DbSet<AccountModel> Accounts { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
         public TradezillaContext(DbContextOptions<TradezillaContext> options) : base(options)
         {

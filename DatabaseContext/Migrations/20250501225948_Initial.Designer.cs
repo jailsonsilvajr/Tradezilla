@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseContext.Migrations
 {
     [DbContext(typeof(TradezillaContext))]
-    [Migration("20250501190519_Initial")]
+    [Migration("20250501225948_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,29 +25,33 @@ namespace DatabaseContext.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DatabaseContext.Models.AccountModel", b =>
+            modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AccountId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Document")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("varchar");
 
-                    b.Property<string>("EmailAdrress")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("varchar");
 
-                    b.HasKey("Id");
+                    b.HasKey("AccountId");
 
                     b.ToTable("Accounts", (string)null);
                 });

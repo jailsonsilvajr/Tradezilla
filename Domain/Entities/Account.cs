@@ -10,6 +10,7 @@ namespace Domain.Entities
         public static readonly int MAX_DOCUMENT_LENGTH = 11;
         public static readonly int MAX_PASSWORD_LENGTH = 14;
         private static readonly AccountValidator _validator = new AccountValidator();
+
         public Guid AccountId { get; }
         public string Name { get; }
         public string Email { get; }
