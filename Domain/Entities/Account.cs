@@ -5,6 +5,10 @@ namespace Domain.Entities
 {
     public class Account
     {
+        public static readonly int MAX_NAME_LENGTH = 100;
+        public static readonly int MAX_EMAIL_LENGTH = 50;
+        public static readonly int MAX_DOCUMENT_LENGTH = 11;
+        public static readonly int MAX_PASSWORD_LENGTH = 14;
         private static readonly AccountValidator _validator = new AccountValidator();
         public Guid AccountId { get; }
         public string Name { get; }
@@ -17,7 +21,7 @@ namespace Domain.Entities
             AccountId = accountId;
             Name = name;
             Email = email;
-            Document = document;
+            Document = CleanDocument(document);
             Password = password;
         }
 
@@ -31,6 +35,13 @@ namespace Domain.Entities
             }
 
             return newAccount;
+        }
+
+        public static string CleanDocument(string document)
+        {
+            return document.Trim()
+                .Replace(".", "")
+                .Replace("-", "");
         }
     }
 }

@@ -9,11 +9,16 @@ namespace Domain.Validators
         public AccountValidator()
         {
             RuleFor(x => x.Name)
-                .Must(name => !string.IsNullOrEmpty(name) && Regex.IsMatch(name, @"[a-zA-Z] [a-zA-Z]+"))
+                .Must(name => 
+                    !string.IsNullOrEmpty(name) 
+                    && Regex.IsMatch(name, @"[a-zA-Z] [a-zA-Z]+") 
+                    && name.Length <= Account.MAX_NAME_LENGTH)
                 .WithMessage("Invalid name");
-
             RuleFor(x => x.Email)
-                .Must(email => !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^(.+)\@(.+)$"))
+                .Must(email => 
+                    !string.IsNullOrEmpty(email) 
+                    && Regex.IsMatch(email, @"^(.+)\@(.+)$") 
+                    && email.Length <= Account.MAX_EMAIL_LENGTH)
                 .WithMessage("Invalid email");
 
             RuleFor(x => x.Document)
@@ -21,25 +26,25 @@ namespace Domain.Validators
                 .WithMessage("Invalid document");
 
             RuleFor(x => x.Password)
-                .Must(password => !string.IsNullOrEmpty(password)
+                .Must(password => 
+                    !string.IsNullOrEmpty(password)
                     && Regex.IsMatch(password, @"\d+")
                     && Regex.IsMatch(password, @"[a-z]+")
-                    && Regex.IsMatch(password, @"[A-Z]+"))
+                    && Regex.IsMatch(password, @"[A-Z]+")
+                    && password.Length <= Account.MAX_PASSWORD_LENGTH)
                 .WithMessage("Invalid password");
         }
 
         private static bool ValidateDocument(string? document)
         {
-            const int VALID_LENGTH = 11;
-
             if (document is null)
             {
                 return false;
             }
 
-            document = CleanDocument(document);
+            document = Account.CleanDocument(document);
 
-            if (document.Length != VALID_LENGTH)
+            if (document.Length != Account.MAX_DOCUMENT_LENGTH)
             {
                 return false;
             }
@@ -52,13 +57,6 @@ namespace Domain.Validators
             var digit1 = CalculateDigit(document, 10);
             var digit2 = CalculateDigit(document, 11);
             return ExtractDigit(document).Equals($"{digit1}{digit2}");
-        }
-
-        private static string CleanDocument(string document)
-        {
-            return document.Trim()
-                .Replace(".", "")
-                .Replace("-", "");
         }
 
         private static bool AllDigitsEqual(string document)
