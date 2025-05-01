@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{414B9A2E-00DE-499C-9E95-2E16ABCAE068}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3C234EF0-C7F1-4BF6-AD32-92C0F88A550F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseContext", "DatabaseContext\DatabaseContext.csproj", "{5A49713B-B236-47E6-880F-E8C46E6FBE8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driving", "Driving", "{4676AEBB-2B99-4815-8E80-C04219C86A14}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driven", "Driven", "{F52F5B6F-32DD-4B3C-8310-1E737A180A78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +34,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{414B9A2E-00DE-499C-9E95-2E16ABCAE068} = {4676AEBB-2B99-4815-8E80-C04219C86A14}
+		{3C234EF0-C7F1-4BF6-AD32-92C0F88A550F} = {4676AEBB-2B99-4815-8E80-C04219C86A14}
+		{5A49713B-B236-47E6-880F-E8C46E6FBE8B} = {F52F5B6F-32DD-4B3C-8310-1E737A180A78}
 	EndGlobalSection
 EndGlobal
