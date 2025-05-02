@@ -42,9 +42,6 @@ namespace Tests.Integration
             Assert.Equal("john.doe@gmail.com", accountDto.Email);
             Assert.Equal("97456321558", accountDto.Document);
             Assert.Equal("asdQWE123", accountDto.Password);
-
-            var deleteRequestUri = $"/api/account?accountId={accountDto.AccountId}";
-            await _client.DeleteAsync(deleteRequestUri);
         }
 
         [Fact]

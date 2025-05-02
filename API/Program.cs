@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
-builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
+var env = builder.Environment;
+if (!env.IsEnvironment("Testing"))
+{
+    var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
+    builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
+}
 
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
-builder.Services.AddScoped<IDeleteAccountUseCase, DeleteAccountUseCase>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

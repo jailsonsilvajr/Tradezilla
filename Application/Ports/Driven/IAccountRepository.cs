@@ -6,6 +6,5 @@ namespace Application.Ports.Driven
     {
         void RegisterAccount(Account account);
         Task<Account?> GetAccountByDocumentAsync(string document);
-        Task DeleteAccountByIdAsync(Guid accountId);
     }
 }
