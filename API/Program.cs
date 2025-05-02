@@ -11,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServerConne
 builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
+builder.Services.AddScoped<IDeleteAccountUseCase, DeleteAccountUseCase>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -34,5 +35,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 public partial class Program { }

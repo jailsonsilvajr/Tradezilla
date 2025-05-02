@@ -29,7 +29,10 @@ namespace DatabaseContext.Repositories
 
         public async Task DeleteAccountByIdAsync(Guid accountId)
         {
-            var account = await _context.Accounts.FindAsync(accountId);
+            var account = await _context
+                .Accounts
+                .FirstOrDefaultAsync(x => x.AccountId == accountId);
+
             if (account != null)
             {
                 _context.Accounts.Remove(account);
