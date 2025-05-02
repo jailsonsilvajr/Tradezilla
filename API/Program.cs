@@ -1,7 +1,8 @@
-using API.DTOs;
-using API.Validators;
+using Application.Ports.Driven;
+using Application.Ports.Driving;
+using Application.UseCases;
 using DatabaseContext;
-using FluentValidation;
+using DatabaseContext.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
 builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<IValidator<SignUpDto>, SignUpDtoValidator>();
+builder.Services.AddScoped<ISignUp, SignUpUseCase>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

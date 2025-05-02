@@ -1,7 +1,9 @@
 ﻿using API.DTOs;
-using DatabaseContext;
-using FluentValidation;
+using Application.DTOs;
+using Application.Ports.Driving;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -9,46 +11,34 @@ namespace API.Controllers
     [ApiController]
     public class SignUpController : ControllerBase
     {
-        private readonly IValidator<SignUpDto> _signUpDtoValidator;
-        private readonly TradezillaContext _context;
-
-        public SignUpController(IValidator<SignUpDto> signUpDtoValidator, TradezillaContext context)
-        {
-            _signUpDtoValidator = signUpDtoValidator;
-            _context = context;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto)
+        public async Task<IActionResult> SignUp(
+            [FromServices] ISignUp _signUpUseCase,
+            [FromBody] AccountDto accountDto)
         {
-            var validationResult = _signUpDtoValidator.Validate(signUpDto);
-            if (!validationResult.IsValid)
+            try
+            {
+                var accountId = await _signUpUseCase.SingUpAsync(accountDto);
+                accountDto.AccountId = accountId;
+
+                return Ok(accountDto);
+            }
+            catch (ValidationException ex)
             {
                 return StatusCode(422, new ErrorResponseDto
                 {
-                    ErrorMessages = validationResult.Errors
+                    ErrorMessages = ex.Errors
                         .Select(x => x.ErrorMessage)
                         .ToList()
                 });
             }
-
-            var accountDto = new AccountDto
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid(),
-                Name = signUpDto.Name,
-                Email = signUpDto.Email,
-                Document = signUpDto.Document,
-                Password = signUpDto.Password
-            };
-
-            await _context.InsertAccountAsync(
-                accountDto.Id, 
-                accountDto.Name!, 
-                accountDto.Email!, 
-                accountDto.Document!, 
-                accountDto.Password!);
-
-            return Ok(accountDto);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResponseDto
+                {
+                    ErrorMessages = new List<string> { ex.Message }
+                });
+            }
         }
     }
 }
