@@ -27,6 +27,9 @@ namespace DatabaseContext.Config
             builder.Property(x => x.Password)
                 .HasColumnType("varchar")
                 .HasMaxLength(Account.MAX_PASSWORD_LENGTH);
+
+            builder.HasIndex(x => x.Document)
+                .IsUnique();
         }
     }
 }
