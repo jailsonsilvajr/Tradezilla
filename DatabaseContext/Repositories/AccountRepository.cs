@@ -26,5 +26,14 @@ namespace DatabaseContext.Repositories
                 .Accounts
                 .FirstOrDefaultAsync(a => a.Document == document);
         }
+
+        public async Task DeleteAccountByIdAsync(Guid accountId)
+        {
+            var account = await _context.Accounts.FindAsync(accountId);
+            if (account != null)
+            {
+                _context.Accounts.Remove(account);
+            }
+        }
     }
 }
