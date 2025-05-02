@@ -1,5 +1,4 @@
 ﻿using API.DTOs;
-using Application.DTOs;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -34,14 +33,9 @@ namespace Tests.Integration
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            var accountDto = JsonConvert.DeserializeObject<AccountDto>(responseContent);
+            var accountId = JsonConvert.DeserializeObject<Guid>(responseContent);
 
-            Assert.NotNull(accountDto);
-            Assert.NotEqual(Guid.Empty, accountDto.AccountId);
-            Assert.Equal("John Doe", accountDto.Name);
-            Assert.Equal("john.doe@gmail.com", accountDto.Email);
-            Assert.Equal("97456321558", accountDto.Document);
-            Assert.Equal("asdQWE123", accountDto.Password);
+            Assert.NotEqual(Guid.Empty, accountId);
         }
 
         [Fact]

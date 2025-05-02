@@ -14,14 +14,12 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(
             [FromServices] ISignUp _signUpUseCase,
-            [FromBody] AccountDto accountDto)
+            [FromBody] SignUpDto signUpDto)
         {
             try
             {
-                var accountId = await _signUpUseCase.SingUpAsync(accountDto);
-                accountDto.AccountId = accountId;
-
-                return Ok(accountDto);
+                var accountId = await _signUpUseCase.SingUpAsync(signUpDto);
+                return Ok(accountId);
             }
             catch (ValidationException ex)
             {

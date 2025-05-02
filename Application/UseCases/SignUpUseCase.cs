@@ -16,13 +16,13 @@ namespace Application.UseCases
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> SingUpAsync(AccountDto accountDto)
+        public async Task<Guid> SingUpAsync(SignUpDto signUpDto)
         {
             var account = Account.Create(
-                accountDto.Name,
-                accountDto.Email,
-                accountDto.Document,
-                accountDto.Password);
+                signUpDto.Name,
+                signUpDto.Email,
+                signUpDto.Document,
+                signUpDto.Password);
 
             _accountRepository.RegisterAccount(account);
             await _unitOfWork.SaveChangesAsync();
