@@ -44,7 +44,7 @@ namespace Domain.Validators
 
             document = Account.CleanDocument(document);
 
-            if (document.Length != Account.MAX_DOCUMENT_LENGTH)
+            if (document is null || document.Length != Account.MAX_DOCUMENT_LENGTH)
             {
                 return false;
             }

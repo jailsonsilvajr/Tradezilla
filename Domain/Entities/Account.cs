@@ -12,12 +12,12 @@ namespace Domain.Entities
         private static readonly AccountValidator _validator = new AccountValidator();
 
         public Guid AccountId { get; }
-        public string Name { get; }
-        public string Email { get; }
-        public string Document { get; }
-        public string Password { get; }
+        public string? Name { get; }
+        public string? Email { get; }
+        public string? Document { get; }
+        public string? Password { get; }
 
-        private Account(Guid accountId, string name, string email, string document, string password)
+        private Account(Guid accountId, string? name, string? email, string? document, string? password)
         {
             AccountId = accountId;
             Name = name;
@@ -26,23 +26,23 @@ namespace Domain.Entities
             Password = password;
         }
 
-        public static Account Create(string name, string email, string document, string password)
+        public static Account Create(string? name, string? email, string? document, string? password)
         {
             var newAccount = new Account(Guid.NewGuid(), name, email, document, password);
             var validationResult = _validator.Validate(newAccount);
             if (!validationResult.IsValid)
             {
-                throw new ValidationException("", validationResult.Errors);
+                throw new ValidationException("Invalid data to create account", validationResult.Errors);
             }
 
             return newAccount;
         }
 
-        public static string CleanDocument(string document)
+        public static string? CleanDocument(string? document)
         {
-            return document.Trim()
-                .Replace(".", "")
-                .Replace("-", "");
+            return document is null 
+                ? default 
+                : document.Trim().Replace(".", "").Replace("-", "");
         }
     }
 }
