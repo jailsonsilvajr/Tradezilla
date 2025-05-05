@@ -26,5 +26,13 @@ namespace DatabaseContext.Repositories
                 .Accounts
                 .FirstOrDefaultAsync(a => a.Document == document);
         }
+
+        public async Task<Account?> GetAccountByAccountIdAsync(Guid accountId)
+        {
+            return await _context
+                .Accounts
+                .Include(a => a.Deposits)
+                .FirstOrDefaultAsync(a => a.AccountId == accountId);
+        }
     }
 }
