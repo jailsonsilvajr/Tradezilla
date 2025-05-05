@@ -12,9 +12,9 @@ namespace Domain.Validators
                 .WithMessage("AccountId cannot be empty");
 
             RuleFor(deposit => deposit.AssetId)
-                .NotEmpty()
-                .WithMessage("AssetId cannot be empty")
-                .Length(1, Deposit.MAX_ASSETID_LENGTH)
+                .Must(x => 
+                    !string.IsNullOrEmpty(x) 
+                    && x.Length > 0 && x.Length <= Deposit.MAX_ASSETID_LENGTH)
                 .WithMessage($"AssetId must be between 1 and {Deposit.MAX_ASSETID_LENGTH} characters long");
 
             RuleFor(deposit => deposit.Quantity)
