@@ -16,6 +16,7 @@ if (!env.IsEnvironment("Testing"))
 
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
 builder.Services.AddScoped<IDeposit, DepositUseCase>();
+builder.Services.AddScoped<IGetAccount, GetAccountUseCase>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IDepositRepository, DepositRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

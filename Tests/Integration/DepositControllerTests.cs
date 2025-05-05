@@ -50,9 +50,9 @@ namespace Tests.Integration
 
             Assert.NotNull(accountDto);
             Assert.NotNull(accountDto.Assets);
-            Assert.Collection(accountDto.Assets,
-                asset => Assert.Equal("BTC", asset.AssetId),
-                asset => Assert.Equal(10, asset.Quantity));
+            Assert.Single(accountDto.Assets);
+            Assert.All(accountDto.Assets, asset => Assert.Equal("BTC", asset.AssetId));
+            Assert.All(accountDto.Assets, asset => Assert.Equal(10, asset.Quantity));
         }
 
         [Fact]
