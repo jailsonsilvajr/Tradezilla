@@ -6,32 +6,22 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class DepositControllerTests
+    public class DepositControllerTests : BaseControllerTests, IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly HttpClient _client;
-
-        public DepositControllerTests()
+        public DepositControllerTests(CustomWebApplicationFactory<Program> factory) : base(factory.CreateClient())
         {
-            var factory = new CustomWebApplicationFactory<Program>();
-            _client = factory.CreateClient();
         }
 
         [Fact]
         public async Task MustMakeADeposit()
         {
-            var signupRequestUri = "/api/signup";
-            var signupJson = JsonConvert.SerializeObject(new
+            var accountId = await SignUp(new SignUpDto
             {
                 Name = "John Doe",
                 Email = "john.doe@gmail.com",
-                Document = "97456321558",
+                Document = "61368060021",
                 Password = "asdQWE123"
             });
-            var signupContent = new StringContent(signupJson, Encoding.UTF8, "application/json");
-            var signupResponse = await _client.PostAsync(signupRequestUri, signupContent);
-
-            var signupResponseContent = await signupResponse.Content.ReadAsStringAsync();
-            var accountId = JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
 
             var depositRequestUri = "/api/deposit";
             var depositJson = JsonConvert.SerializeObject(new
@@ -113,24 +103,18 @@ namespace Tests.Integration
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("BTCBTC")]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidAssetName(string? assetName)
+        [InlineData(null, "53688039076")]
+        [InlineData("", "15142888006")]
+        [InlineData("BTCBTC", "16599447082")]
+        public async Task ShouldNotCreateAnDepositWithAnInvalidAssetName(string? assetName, string document)
         {
-            var signupRequestUri = "/api/signup";
-            var signupJson = JsonConvert.SerializeObject(new
+            var accountId = await SignUp(new SignUpDto
             {
                 Name = "John Doe",
                 Email = "john.doe@gmail.com",
-                Document = "97456321558",
+                Document = document,
                 Password = "asdQWE123"
             });
-            var signupContent = new StringContent(signupJson, Encoding.UTF8, "application/json");
-            var signupResponse = await _client.PostAsync(signupRequestUri, signupContent);
-
-            var signupResponseContent = await signupResponse.Content.ReadAsStringAsync();
-            var accountId = JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
 
             var json = JsonConvert.SerializeObject(new
             {
@@ -153,23 +137,17 @@ namespace Tests.Integration
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity)
+        [InlineData(0, "91921373008")]
+        [InlineData(-1, "20493335013")]
+        public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity, string document)
         {
-            var signupRequestUri = "/api/signup";
-            var signupJson = JsonConvert.SerializeObject(new
+            var accountId = await SignUp(new SignUpDto
             {
                 Name = "John Doe",
                 Email = "john.doe@gmail.com",
-                Document = "97456321558",
+                Document = document,
                 Password = "asdQWE123"
             });
-            var signupContent = new StringContent(signupJson, Encoding.UTF8, "application/json");
-            var signupResponse = await _client.PostAsync(signupRequestUri, signupContent);
-
-            var signupResponseContent = await signupResponse.Content.ReadAsStringAsync();
-            var accountId = JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
 
             var json = JsonConvert.SerializeObject(new
             {
