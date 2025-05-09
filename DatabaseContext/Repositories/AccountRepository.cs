@@ -31,7 +31,7 @@ namespace DatabaseContext.Repositories
         {
             return await _context
                 .Accounts
-                .Include(a => a.Deposits)
+                .Include(a => a.Assets)
                 .FirstOrDefaultAsync(a => a.AccountId == accountId);
         }
     }

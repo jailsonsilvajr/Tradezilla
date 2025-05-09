@@ -6,37 +6,28 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class DepositControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class DepositControllerTests : BaseControllerTests, IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly HttpClient _client;
-
-        public DepositControllerTests(CustomWebApplicationFactory<Program> factory)
+        public DepositControllerTests(CustomWebApplicationFactory<Program> factory) : base(factory.CreateClient())
         {
-            _client = factory.CreateClient();
         }
 
         [Fact]
         public async Task MustMakeADeposit()
         {
-            var signupRequestUri = "/api/signup";
-            var signupJson = JsonConvert.SerializeObject(new
+            var accountId = await SignUp(new SignUpDto
             {
                 Name = "John Doe",
                 Email = "john.doe@gmail.com",
-                Document = "97456321558",
+                Document = "61368060021",
                 Password = "asdQWE123"
             });
-            var signupContent = new StringContent(signupJson, Encoding.UTF8, "application/json");
-            var signupResponse = await _client.PostAsync(signupRequestUri, signupContent);
-
-            var signupResponseContent = await signupResponse.Content.ReadAsStringAsync();
-            var accountId = JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
 
             var depositRequestUri = "/api/deposit";
             var depositJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
-                AssetId = "BTC",
+                AssetName = "BTC",
                 Quantity = 10
             });
             var depositContent = new StringContent(depositJson, Encoding.UTF8, "application/json");
@@ -51,8 +42,8 @@ namespace Tests.Integration
             Assert.NotNull(accountDto);
             Assert.NotNull(accountDto.Assets);
             Assert.Single(accountDto.Assets);
-            Assert.All(accountDto.Assets, asset => Assert.Equal("BTC", asset.AssetId));
-            Assert.All(accountDto.Assets, asset => Assert.Equal(10, asset.Quantity));
+            Assert.All(accountDto.Assets, asset => Assert.Equal("BTC", asset.AssetName));
+            Assert.All(accountDto.Assets, asset => Assert.Equal(10, asset.Balance));
         }
 
         [Fact]
@@ -71,7 +62,7 @@ namespace Tests.Integration
         {
             var json = JsonConvert.SerializeObject(new
             {
-                AssertId = "BTC",
+                AssetName = "BTC",
                 Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -85,7 +76,7 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains("AccountId cannot be empty", errorResponseDto.ErrorMessages);
+            Assert.Contains($"Account {Guid.Empty} not found", errorResponseDto.ErrorMessages);
         }
 
         [Fact]
@@ -94,7 +85,7 @@ namespace Tests.Integration
             var json = JsonConvert.SerializeObject(new
             {
                 AccountId = Guid.Empty,
-                AssertId = "BTC",
+                AssetName = "BTC",
                 Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -108,19 +99,27 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains("AccountId cannot be empty", errorResponseDto.ErrorMessages);
+            Assert.Contains($"Account {Guid.Empty} not found", errorResponseDto.ErrorMessages);
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("BTCBTC")]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidAssetId(string? assetId)
+        [InlineData(null, "53688039076")]
+        [InlineData("", "15142888006")]
+        [InlineData("BTCBTC", "16599447082")]
+        public async Task ShouldNotCreateAnDepositWithAnInvalidAssetName(string? assetName, string document)
         {
+            var accountId = await SignUp(new SignUpDto
+            {
+                Name = "John Doe",
+                Email = "john.doe@gmail.com",
+                Document = document,
+                Password = "asdQWE123"
+            });
+
             var json = JsonConvert.SerializeObject(new
             {
-                AccountId = Guid.NewGuid(),
-                AssertId = assetId,
+                AccountId = accountId,
+                AssetName = assetName,
                 Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -134,18 +133,26 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains($"AssetId must be between 1 and {Deposit.MAX_ASSETID_LENGTH} characters long", errorResponseDto.ErrorMessages);
+            Assert.Contains($"AssetName must be between 1 and {Asset.MAX_ASSETNAME_LENGTH} characters long", errorResponseDto.ErrorMessages);
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity)
+        [InlineData(0, "91921373008")]
+        [InlineData(-1, "20493335013")]
+        public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity, string document)
         {
+            var accountId = await SignUp(new SignUpDto
+            {
+                Name = "John Doe",
+                Email = "john.doe@gmail.com",
+                Document = document,
+                Password = "asdQWE123"
+            });
+
             var json = JsonConvert.SerializeObject(new
             {
-                AccountId = Guid.Empty,
-                AssertId = "BTC",
+                AccountId = accountId,
+                AssetName = "BTC",
                 Quantity = quantity
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");

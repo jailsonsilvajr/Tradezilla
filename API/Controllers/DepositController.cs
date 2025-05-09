@@ -30,6 +30,13 @@ namespace API.Controllers
                         .ToList()
                 });
             }
+            catch (EntityNotFoundException ex)
+            {
+                return StatusCode(422, new ErrorResponseDto
+                {
+                    ErrorMessages = new List<string> { ex.Message }
+                });
+            }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorResponseDto
