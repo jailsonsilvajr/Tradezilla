@@ -15,13 +15,7 @@ namespace Tests.Integration
         [Fact]
         public async Task MustMakeADeposit()
         {
-            var accountId = await SignUp(new SignUpDto
-            {
-                Name = "John Doe",
-                Email = "john.doe@gmail.com",
-                Document = "61368060021",
-                Password = "asdQWE123"
-            });
+            var accountId = await SignUp("61368060021");
 
             var depositRequestUri = "/api/deposit";
             var depositJson = JsonConvert.SerializeObject(new
@@ -108,13 +102,7 @@ namespace Tests.Integration
         [InlineData("BTCBTC", "16599447082")]
         public async Task ShouldNotCreateAnDepositWithAnInvalidAssetName(string? assetName, string document)
         {
-            var accountId = await SignUp(new SignUpDto
-            {
-                Name = "John Doe",
-                Email = "john.doe@gmail.com",
-                Document = document,
-                Password = "asdQWE123"
-            });
+            var accountId = await SignUp(document);
 
             var json = JsonConvert.SerializeObject(new
             {
@@ -141,13 +129,7 @@ namespace Tests.Integration
         [InlineData(-1, "20493335013")]
         public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity, string document)
         {
-            var accountId = await SignUp(new SignUpDto
-            {
-                Name = "John Doe",
-                Email = "john.doe@gmail.com",
-                Document = document,
-                Password = "asdQWE123"
-            });
+            var accountId = await SignUp(document);
 
             var json = JsonConvert.SerializeObject(new
             {

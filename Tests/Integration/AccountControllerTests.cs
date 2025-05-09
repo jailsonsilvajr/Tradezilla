@@ -13,7 +13,7 @@ namespace Tests.Integration
         [Fact]
         public async Task MustGetAAccount()
         {
-            var accountId = await SignUp();
+            var accountId = await SignUp("65542538070");
             var accountResponse = await _client.GetAsync($"/api/account?accountId={accountId}");
 
             var accountResponseContent = await accountResponse.Content.ReadAsStringAsync();
