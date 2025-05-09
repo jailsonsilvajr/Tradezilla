@@ -2,8 +2,8 @@
 
 namespace Application.Ports.Driven
 {
-    public interface IDepositRepository
+    public interface IAssetRepository
     {
-        void Insert(Deposit deposit);
+        void Insert(Asset asset);
     }
 }

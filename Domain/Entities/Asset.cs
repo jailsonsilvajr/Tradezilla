@@ -9,21 +9,24 @@ namespace Domain.Entities
         private static readonly AssetValidator _validator = new AssetValidator();
 
         public Guid AssetId { get; set; }
+        public Guid AccountId { get; set; }
         public string? AssetName { get; set; }
         public decimal Balance { get; set; }
+        public Account? Account { get; set; }
         public ICollection<Deposit> Deposits { get; set; }
 
-        private Asset(Guid assetId, string? assetName, decimal balance)
+        private Asset(Guid assetId, Guid accountId, string? assetName)
         {
             AssetId = assetId;
+            AccountId = accountId;
             AssetName = assetName;
-            Balance = balance;
+            Balance = 0;
             Deposits = new List<Deposit>();
         }
 
-        public static Asset Create(Guid assetId, string? assetName, decimal balance)
+        public static Asset Create(Guid accountId, string? assetName)
         {
-            var newAsset =  new Asset(assetId, assetName, balance);
+            var newAsset =  new Asset(Guid.NewGuid(), accountId, assetName);
             var validationResult = _validator.Validate(newAsset);
             if (!validationResult.IsValid)
             {

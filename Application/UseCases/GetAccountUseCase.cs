@@ -17,22 +17,19 @@ namespace Application.UseCases
         public async Task<AccountDto> GetAccountByAccountIdAsync(Guid accountId)
         {
             var account = await _accountRepository.GetAccountByAccountIdAsync(accountId);
-            if (account is null)
-            {
-                throw new EntityNotFoundException($"Account {accountId} not found");
-            }
-
-            return new AccountDto
-            {
-                Name = account.Name,
-                Email = account.Email,
-                Document = account.Document,
-                Assets = account.Deposits.Select(d => new AssetDto
+            return account is null
+                ? throw new EntityNotFoundException($"Account {accountId} not found")
+                : new AccountDto
                 {
-                    AssetId = d.AssetId,
-                    Quantity = d.Quantity
-                }).ToList()
-            };
+                    Name = account.Name,
+                    Email = account.Email,
+                    Document = account.Document,
+                    Assets = account.Assets.Select(d => new AssetDto
+                    {
+                        AssetName = d.AssetName,
+                        Balance = d.Balance
+                    }).ToList()
+                };
         }
     }
 }

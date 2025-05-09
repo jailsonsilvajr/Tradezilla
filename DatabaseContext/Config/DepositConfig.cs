@@ -12,18 +12,13 @@ namespace DatabaseContext.Config
             
             builder.HasKey(d => d.DepositId);
 
-            builder
-                .Property(d => d.AssetId)
-                .HasColumnType("varchar")
-                .HasMaxLength(Deposit.MAX_ASSETID_LENGTH);
-
             builder.Property(d => d.Quantity)
                 .HasColumnType("decimal(18,2)");
 
             builder
-                .HasOne(d => d.Account)
+                .HasOne(d => d.Asset)
                 .WithMany(a => a.Deposits)
-                .HasForeignKey(d => d.AccountId)
+                .HasForeignKey(d => d.AssetId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -2,28 +2,45 @@
 using Application.Ports.Driven;
 using Application.Ports.Driving;
 using Domain.Entities;
+using Domain.Exceptions;
 
 namespace Application.UseCases
 {
     public class DepositUseCase : IDeposit
     {
-        private readonly IDepositRepository _depositRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAssetRepository _assetRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DepositUseCase(IDepositRepository depositRepository, IUnitOfWork unitOfWork)
+        public DepositUseCase(IAccountRepository accountRepository, IAssetRepository assetRepository, IUnitOfWork unitOfWork)
         {
-            _depositRepository = depositRepository;
+            _accountRepository = accountRepository;
+            _assetRepository = assetRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task DepositAsync(DepositDto depositDto)
         {
+            var account = await _accountRepository.GetAccountByAccountIdAsync(depositDto.AccountId);
+            if (account is null)
+            {
+                throw new EntityNotFoundException($"Account {depositDto.AccountId} not found");
+            }
+
+            var asset = account.Assets.FirstOrDefault(a => a.AssetName == depositDto.AssetName);
+            if (asset is null)
+            {
+                asset = Asset.Create(depositDto.AccountId, depositDto.AssetName);
+                _assetRepository.Insert(asset);
+            }
+
             var deposit = Deposit.Create(
-                depositDto.AccountId,
-                depositDto.AssetId,
+                asset.AssetId,
                 depositDto.Quantity);
 
-            _depositRepository.Insert(deposit);
+            asset.Balance += depositDto.Quantity;
+            asset.Deposits.Add(deposit);
+
             await _unitOfWork.SaveChangesAsync();
         }
     }

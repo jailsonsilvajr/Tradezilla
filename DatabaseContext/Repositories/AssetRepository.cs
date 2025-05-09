@@ -3,18 +3,18 @@ using Domain.Entities;
 
 namespace DatabaseContext.Repositories
 {
-    public class DepositRepository : IDepositRepository
+    public class AssetRepository : IAssetRepository
     {
         private readonly TradezillaContext _context;
 
-        public DepositRepository(TradezillaContext context)
+        public AssetRepository(TradezillaContext context)
         {
             _context = context;
         }
 
-        public void Insert(Deposit deposit)
+        public void Insert(Asset asset)
         {
-            _context.Deposits.Add(deposit);
+            _context.Assets.Add(asset);
         }
     }
 }
