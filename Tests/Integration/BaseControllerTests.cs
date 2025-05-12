@@ -1,5 +1,4 @@
-﻿using Application.DTOs;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text;
 
 namespace Tests.Integration
@@ -13,14 +12,14 @@ namespace Tests.Integration
             _client = client;
         }
 
-        protected async Task<Guid> SignUp(SignUpDto? signUpDto = null)
+        protected async Task<Guid> SignUp(string document)
         {
             var signupRequestUri = "/api/signup";
-            var signupJson = JsonConvert.SerializeObject(signUpDto ?? new SignUpDto
+            var signupJson = JsonConvert.SerializeObject(new
             {
                 Name = "John Doe",
                 Email = "john.doe@gmail.com",
-                Document = "97456321558",
+                Document = document,
                 Password = "asdQWE123"
             });
             var signupContent = new StringContent(signupJson, Encoding.UTF8, "application/json");
