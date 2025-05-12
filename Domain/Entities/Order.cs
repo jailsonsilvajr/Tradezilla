@@ -17,6 +17,7 @@ namespace Domain.Entities
         public int FillQuantity { get; }
         public decimal FillPrice { get; }
         public DateTime CreatedAt { get; }
+        public Account? Account { get; set; }
 
         private Order(
             Guid orderId, Guid accountId, string? market, 

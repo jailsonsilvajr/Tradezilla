@@ -17,6 +17,7 @@ namespace Domain.Entities
         public string? Document { get; }
         public string? Password { get; }
         public ICollection<Asset> Assets { get; }
+        public ICollection<Order> Orders { get; }
 
         private Account(Guid accountId, string? name, string? email, string? document, string? password)
         {
@@ -26,6 +27,7 @@ namespace Domain.Entities
             Document = CleanDocument(document);
             Password = password;
             Assets = new List<Asset>();
+            Orders = new List<Order>();
         }
 
         public static Account Create(string? name, string? email, string? document, string? password)
