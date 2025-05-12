@@ -9,6 +9,7 @@ namespace DatabaseContext
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Deposit> Deposits { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public TradezillaContext(DbContextOptions<TradezillaContext> options) : base(options)
         {
@@ -20,6 +21,7 @@ namespace DatabaseContext
             modelBuilder.ApplyConfiguration(new AccountConfig());
             modelBuilder.ApplyConfiguration(new AssetConfig());
             modelBuilder.ApplyConfiguration(new DepositConfig());
+            modelBuilder.ApplyConfiguration(new OrderConfig());
         }
     }
 }
