@@ -34,6 +34,12 @@ namespace Domain.Validators
             RuleFor(order => order.CreatedAt)
                 .NotNull()
                 .WithMessage("CreatedAt cannot be null");
+
+            RuleFor(order => order.Status)
+                .NotEmpty()
+                .WithMessage("Status cannot be null, empty or whitespace")
+                .Length(1, Order.MAX_STATUS_LENGTH)
+                .WithMessage($"Status must be between 1 and {Order.MAX_STATUS_LENGTH} characters long");
         }
     }
 }

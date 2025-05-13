@@ -36,6 +36,11 @@ namespace DatabaseContext.Config
             builder.Property(order => order.CreatedAt)
                 .IsRequired();
 
+            builder.Property(order => order.Status)
+                .HasColumnType("varchar")
+                .HasMaxLength(Order.MAX_STATUS_LENGTH)
+                .IsRequired();
+
             builder
                 .HasOne(order => order.Account)
                 .WithMany(account => account.Orders)
