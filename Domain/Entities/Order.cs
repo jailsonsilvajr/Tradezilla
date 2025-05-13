@@ -7,6 +7,7 @@ namespace Domain.Entities
     {
         public static readonly int MAX_MARKET_LENGTH = 7;
         public static readonly int MAX_SIDE_LENGTH = 5;
+        public static readonly int MAX_STATUS_LENGTH = 10;
         private static readonly OrderValidator _validator = new OrderValidator();
         public Guid OrderId { get; }
         public Guid AccountId { get; set; }
@@ -17,12 +18,14 @@ namespace Domain.Entities
         public int FillQuantity { get; }
         public decimal FillPrice { get; }
         public DateTime CreatedAt { get; }
+        public string? Status { get; set; }
         public Account? Account { get; set; }
 
         private Order(
             Guid orderId, Guid accountId, string? market, 
             string? side, int quantity, decimal price, 
-            int fillQuantity, decimal fillPrice, DateTime createdAt)
+            int fillQuantity, decimal fillPrice, 
+            DateTime createdAt, string? status)
         {
             OrderId = orderId;
             AccountId = accountId;
@@ -33,6 +36,7 @@ namespace Domain.Entities
             FillQuantity = fillQuantity;
             FillPrice = fillPrice;
             CreatedAt = createdAt;
+            Status = status;
         }
 
         public static Order Create(
@@ -48,7 +52,8 @@ namespace Domain.Entities
                 price,
                 fillQuantity,
                 fillPrice,
-                DateTime.UtcNow);
+                DateTime.UtcNow,
+                "open");
 
             var validationResult = _validator.Validate(newOrder);
             if (!validationResult.IsValid)
