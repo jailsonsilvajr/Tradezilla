@@ -38,8 +38,7 @@ namespace Application.UseCases
                 asset.AssetId,
                 depositDto.Quantity);
 
-            asset.Balance += depositDto.Quantity;
-            asset.Deposits.Add(deposit);
+            asset.AddDeposit(deposit);
 
             await _unitOfWork.SaveChangesAsync();
         }

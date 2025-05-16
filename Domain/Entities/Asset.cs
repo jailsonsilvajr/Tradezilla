@@ -11,7 +11,7 @@ namespace Domain.Entities
         public Guid AssetId { get; set; }
         public Guid AccountId { get; set; }
         public string? AssetName { get; set; }
-        public decimal Balance { get; set; }
+        public decimal Balance { get; private set; }
         public Account? Account { get; set; }
         public ICollection<Deposit> Deposits { get; set; }
 
@@ -34,6 +34,12 @@ namespace Domain.Entities
             }
 
             return newAsset;
+        }
+
+        public void AddDeposit(Deposit deposit)
+        {
+            Deposits.Add(deposit);
+            Balance += deposit.Quantity;
         }
     }
 }
