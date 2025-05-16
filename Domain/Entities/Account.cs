@@ -10,14 +10,16 @@ namespace Domain.Entities
         public static readonly int MAX_DOCUMENT_LENGTH = 11;
         public static readonly int MAX_PASSWORD_LENGTH = 14;
         private static readonly AccountValidator _validator = new AccountValidator();
+        private readonly List<Order> _orders;
+        private readonly List<Asset> _assets;
 
         public Guid AccountId { get; }
         public string? Name { get; }
         public string? Email { get; }
         public string? Document { get; }
         public string? Password { get; }
-        public ICollection<Asset> Assets { get; }
-        public ICollection<Order> Orders { get; }
+        public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
+        public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
         private Account(Guid accountId, string? name, string? email, string? document, string? password)
         {
@@ -26,8 +28,8 @@ namespace Domain.Entities
             Email = email;
             Document = CleanDocument(document);
             Password = password;
-            Assets = new List<Asset>();
-            Orders = new List<Order>();
+            _assets = [];
+            _orders = [];
         }
 
         public static Account Create(string? name, string? email, string? document, string? password)
@@ -47,6 +49,33 @@ namespace Domain.Entities
             return document is null 
                 ? default 
                 : document.Trim().Replace(".", "").Replace("-", "");
+        }
+
+        public void AddAsset(Asset asset)
+        {
+            _assets.Add(asset);
+        }
+
+        public void AddOrder(Order order)
+        {
+            var assetName = order.Side?.ToUpper() != "BUY"
+                ? order.Market?.Split("/")[0].ToUpper()
+                : order.Market?.Split("/")[1].ToUpper();
+
+            var asset = _assets
+                .FirstOrDefault(asset => asset.AssetName?.ToUpper() == assetName);
+
+            if (asset is null)
+            {
+                throw new EntityNotFoundException($"Asset {assetName} not found");
+            }
+
+            if (asset.Balance < order.Quantity * order.Price)
+            {
+                throw new InsufficientBalanceException($"Insufficient balance for asset {assetName}");
+            }
+
+            _orders.Add(order);
         }
     }
 }

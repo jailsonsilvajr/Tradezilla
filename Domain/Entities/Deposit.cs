@@ -11,15 +11,16 @@ namespace Domain.Entities
         public decimal Quantity { get; }
         public Asset? Asset { get; }
 
-        private Deposit(Guid assetId, decimal quantity)
+        private Deposit(Guid depositId, Guid assetId, decimal quantity)
         {
+            DepositId = depositId;
             AssetId = assetId;
             Quantity = quantity;
         }
 
         public static Deposit Create(Guid assetId, decimal quantity)
         {
-            var newDeposit = new Deposit(assetId, quantity);
+            var newDeposit = new Deposit(Guid.NewGuid(), assetId, quantity);
             var validationResult = _validator.Validate(newDeposit);
             if (!validationResult.IsValid)
             {

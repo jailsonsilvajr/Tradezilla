@@ -24,7 +24,6 @@ namespace Domain.Entities
         private Order(
             Guid orderId, Guid accountId, string? market, 
             string? side, int quantity, decimal price, 
-            int fillQuantity, decimal fillPrice, 
             DateTime createdAt, string? status)
         {
             OrderId = orderId;
@@ -33,15 +32,13 @@ namespace Domain.Entities
             Side = side;
             Quantity = quantity;
             Price = price;
-            FillQuantity = fillQuantity;
-            FillPrice = fillPrice;
             CreatedAt = createdAt;
             Status = status;
         }
 
         public static Order Create(
             Guid accountId, string? market, string? side,
-            int quantity, decimal price, int fillQuantity, decimal fillPrice)
+            int quantity, decimal price)
         {
             var newOrder = new Order(
                 Guid.NewGuid(),
@@ -50,8 +47,6 @@ namespace Domain.Entities
                 side,
                 quantity,
                 price,
-                fillQuantity,
-                fillPrice,
                 DateTime.UtcNow,
                 "open");
 
