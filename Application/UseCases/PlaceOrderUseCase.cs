@@ -37,7 +37,22 @@ namespace Application.UseCases
                 placeOrderDto.Quantity,
                 placeOrderDto.Price);
 
-            account.AddOrder(order);
+            var assetName = order.Side?.ToUpper() != "BUY"
+                ? order.Market?.Split("/")[0].ToUpper()
+                : order.Market?.Split("/")[1].ToUpper();
+
+            var asset = account.Assets
+                .FirstOrDefault(asset => asset.AssetName?.ToUpper() == assetName);
+
+            if (asset is null)
+            {
+                throw new EntityNotFoundException($"Asset {assetName} not found");
+            }
+
+            if (asset.Balance < order.Quantity)
+            {
+                throw new InsufficientBalanceException($"Insufficient balance for asset {assetName}");
+            }
 
             _orderRepository.RegisterOrder(order);
             await _unitOfWork.SaveChangesAsync();
