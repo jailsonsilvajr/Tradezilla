@@ -3,6 +3,7 @@ using Application.Ports.Driven;
 using Application.UseCases;
 using Domain.Entities;
 using Domain.Exceptions;
+using FluentAssertions;
 using Moq;
 
 namespace Tests.Unit.UseCase
@@ -71,6 +72,56 @@ namespace Tests.Unit.UseCase
             var orderId = await _placeOrderUseCase.PlaceOrder(placeOrderDto);
 
             Assert.NotEqual(Guid.Empty, orderId);
+        }
+
+        [Fact]
+        public async Task AccountWithoutBalance_ThrowsInsufficientBalanceException()
+        {
+            var placeOrderDto = new PlaceOrderDto
+            {
+                AccountId = Guid.NewGuid(),
+                MarketId = "BTC/USD",
+                Side = "Buy",
+                Quantity = 100,
+                Price = 1000.00m
+            };
+
+            var account = Account.Create(
+                name: "John Doe",
+                email: "johndoe@gmail.com",
+                document: "58865866012",
+                password: "asdQWE123");
+
+            var asset = Asset.Create(account.AccountId, "USD");
+            var deposit = Deposit.Create(asset.AssetId, 10);
+            asset.AddDeposit(deposit);
+            account.AddAsset(asset);
+            _accountRepositoryMock.Setup(repo => repo.GetAccountByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(account);
+
+            await Assert.ThrowsAsync<InsufficientBalanceException>(() => _placeOrderUseCase.PlaceOrder(placeOrderDto));
+        }
+
+        [Fact]
+        public async Task AddOrder_WithNonexistentAsset_ShouldThrowEntityNotFoundException()
+        {
+            var placeOrderDto = new PlaceOrderDto
+            {
+                AccountId = Guid.NewGuid(),
+                MarketId = "BTC/USD",
+                Side = "Buy",
+                Quantity = 1,
+                Price = 1000.00m
+            };
+
+            var account = Account.Create(
+                "John Doe",
+                "johndoe@gmail.com",
+                "58865866012",
+                "asdQWE123");
+
+            _accountRepositoryMock.Setup(repo => repo.GetAccountByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(account);
+
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _placeOrderUseCase.PlaceOrder(placeOrderDto));
         }
     }
 }

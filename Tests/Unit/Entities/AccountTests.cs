@@ -91,52 +91,5 @@ namespace Tests.Unit.Entities
             account.Orders.Should().ContainSingle();
             account.Orders.First().Should().Be(order);
         }
-
-        [Fact]
-        public void AccountWithoutBalance_ThrowsInsufficientBalanceException()
-        {
-            var account = Account.Create(
-                name: "John Doe",
-                email: "johndoe@gmail.com",
-                document: "58865866012",
-                password: "asdQWE123");
-
-            var order = Order.Create(
-                account.AccountId,
-                "BTC/USD",
-                "Buy",
-                100,
-                200);
-
-            var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Deposit.Create(asset.AssetId, 10);
-            asset.AddDeposit(deposit);
-            account.AddAsset(asset);
-
-            var action = () => account.AddOrder(order);
-            action.Should().Throw<InsufficientBalanceException>()
-                .WithMessage("Insufficient balance for asset USD");
-        }
-
-        [Fact]
-        public void AddOrder_WithNonexistentAsset_ShouldThrowEntityNotFoundException()
-        {
-            var account = Account.Create(
-                "John Doe",
-                "johndoe@gmail.com",
-                "58865866012",
-                "asdQWE123");
-
-            var order = Order.Create(
-                account.AccountId,
-                "BTC/USD",
-                "Buy",
-                1,
-                200);
-
-            var action = () => account.AddOrder(order);
-            action.Should().Throw<EntityNotFoundException>()
-                .WithMessage("Asset USD not found");
-        }
     }
 }
