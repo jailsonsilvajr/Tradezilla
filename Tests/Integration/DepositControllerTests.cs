@@ -6,12 +6,8 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class DepositControllerTests : BaseControllerTests, IClassFixture<CustomWebApplicationFactory<Program>>
+    public class DepositControllerTests : BaseControllerTests
     {
-        public DepositControllerTests(CustomWebApplicationFactory<Program> factory) : base(factory.CreateClient())
-        {
-        }
-
         [Fact]
         public async Task MustMakeADeposit()
         {

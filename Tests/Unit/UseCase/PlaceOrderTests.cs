@@ -10,16 +10,19 @@ namespace Tests.Unit.UseCase
     public class PlaceOrderTests
     {
         private readonly Mock<IAccountRepository> _accountRepositoryMock;
+        private readonly Mock<IOrderRepository> _orderRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly PlaceOrderUseCase _placeOrderUseCase;
 
         public PlaceOrderTests()
         {
             _accountRepositoryMock = new Mock<IAccountRepository>();
+            _orderRepositoryMock = new Mock<IOrderRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
 
             _placeOrderUseCase = new PlaceOrderUseCase(
                 _accountRepositoryMock.Object,
+                _orderRepositoryMock.Object,
                 _unitOfWorkMock.Object);
         }
 

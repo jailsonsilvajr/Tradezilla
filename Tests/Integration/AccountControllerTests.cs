@@ -4,12 +4,8 @@ using Newtonsoft.Json;
 
 namespace Tests.Integration
 {
-    public class AccountControllerTests : BaseControllerTests, IClassFixture<CustomWebApplicationFactory<Program>>
+    public class AccountControllerTests : BaseControllerTests
     {
-        public AccountControllerTests(CustomWebApplicationFactory<Program> factory) : base(factory.CreateClient())
-        {
-        }
-
         [Fact]
         public async Task MustGetAAccount()
         {
