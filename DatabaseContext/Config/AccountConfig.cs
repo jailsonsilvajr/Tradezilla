@@ -28,6 +28,12 @@ namespace DatabaseContext.Config
                 .HasColumnType("varchar")
                 .HasMaxLength(Account.MAX_PASSWORD_LENGTH);
 
+            builder.Navigation(nameof(Account.Assets))
+                .HasField("_assets");
+
+            builder.Navigation(nameof(Account.Orders))
+                .HasField("_orders");
+
             builder.HasIndex(x => x.Document)
                 .IsUnique();
         }

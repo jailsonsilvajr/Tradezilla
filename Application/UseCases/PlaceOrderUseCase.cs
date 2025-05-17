@@ -9,13 +9,16 @@ namespace Application.UseCases
     public class PlaceOrderUseCase : IPlaceOrder
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public PlaceOrderUseCase(
-            IAccountRepository accountRepository, 
+            IAccountRepository accountRepository,
+            IOrderRepository orderRepository,
             IUnitOfWork unitOfWork)
         {
             _accountRepository = accountRepository;
+            _orderRepository = orderRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -35,6 +38,8 @@ namespace Application.UseCases
                 placeOrderDto.Price);
 
             account.AddOrder(order);
+
+            _orderRepository.RegisterOrder(order);
             await _unitOfWork.SaveChangesAsync();
 
             return order.OrderId;

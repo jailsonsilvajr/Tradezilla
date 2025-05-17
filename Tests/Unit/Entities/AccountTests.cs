@@ -105,11 +105,11 @@ namespace Tests.Unit.Entities
                 account.AccountId,
                 "BTC/USD",
                 "Buy",
-                1,
+                100,
                 200);
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Deposit.Create(asset.AssetId, 100);
+            var deposit = Deposit.Create(asset.AssetId, 10);
             asset.AddDeposit(deposit);
             account.AddAsset(asset);
 

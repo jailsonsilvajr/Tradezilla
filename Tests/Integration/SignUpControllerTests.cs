@@ -5,15 +5,8 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class SignUpControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class SignUpControllerTests : BaseControllerTests
     {
-        private readonly HttpClient _client;
-
-        public SignUpControllerTests(CustomWebApplicationFactory<Program> factory)
-        {
-            _client = factory.CreateClient();
-        }
-
         [Fact]
         public async Task MustCreateAValidAccount()
         {
