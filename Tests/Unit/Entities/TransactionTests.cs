@@ -21,7 +21,7 @@ namespace Tests.Unit.Entities
             transaction.Should().NotBeNull();
             transaction.TransactionId.Should().NotBeEmpty();
             transaction.AssetId.Should().Be(assetId);
-            transaction.Value.Should().Be(value);
+            transaction.Quantity.Should().Be(value);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Tests.Unit.Entities
 
             // Assert
             transaction.Should().NotBeNull();
-            transaction.Value.Should().Be(value);
+            transaction.Quantity.Should().Be(value);
         }
     }
 } 

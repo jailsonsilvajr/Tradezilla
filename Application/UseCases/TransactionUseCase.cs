@@ -27,7 +27,7 @@ namespace Application.UseCases
 
             var transaction = Transaction.Create(
                 asset.AssetId,
-                transactionDto.Value);
+                transactionDto.Quantity);
 
             asset.AddTransation(transaction);
 

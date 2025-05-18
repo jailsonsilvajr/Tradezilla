@@ -44,7 +44,7 @@ namespace Domain.Entities
         public void AddTransation(Transaction transation)
         {
             _transactions.Add(transation);
-            Balance += transation.Value;
+            Balance += transation.Quantity;
         }
     }
 }

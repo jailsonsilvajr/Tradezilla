@@ -8,9 +8,9 @@ namespace DatabaseContext.Config
     {
         public void Configure(EntityTypeBuilder<TransactionModel> builder)
         {
-            builder.ToTable("Deposits");
+            builder.ToTable("Transactions");
             
-            builder.HasKey(d => d.DepositId);
+            builder.HasKey(d => d.TransactionId);
 
             builder.Property(d => d.Quantity)
                 .HasColumnType("decimal(18,2)");

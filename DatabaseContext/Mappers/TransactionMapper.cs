@@ -9,15 +9,15 @@ namespace DatabaseContext.Mappers
         {
             return new TransactionModel
             {
-                DepositId = deposit.TransactionId,
+                TransactionId = deposit.TransactionId,
                 AssetId = deposit.AssetId,
-                Quantity = deposit.Value,
+                Quantity = deposit.Quantity,
             };
         }
 
         public static Transaction ToDomain(TransactionModel depositModel)
         {
-            return new Transaction(depositModel.DepositId, depositModel.AssetId, depositModel.Quantity);
+            return new Transaction(depositModel.TransactionId, depositModel.AssetId, depositModel.Quantity);
         }
     }
 }
