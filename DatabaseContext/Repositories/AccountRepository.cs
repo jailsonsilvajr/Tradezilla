@@ -39,7 +39,7 @@ namespace DatabaseContext.Repositories
             return await _context
                 .Accounts
                 .Include(a => a.Assets)
-                    .ThenInclude(asset => asset.Deposits)
+                    .ThenInclude(asset => asset.Transactions)
                 .Include(a => a.Orders)
                 .FirstOrDefaultAsync(a => a.AccountId == accountId);
         }

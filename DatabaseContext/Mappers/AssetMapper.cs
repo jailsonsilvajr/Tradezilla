@@ -13,13 +13,13 @@ namespace DatabaseContext.Mappers
                 AccountId = asset.AccountId,
                 AssetName = asset.AssetName,
                 Balance = asset.Balance,
-                Deposits = asset.Deposits.Select(d => DepositMapper.ToModel(d)).ToList()
+                Transactions = asset.Transactions.Select(d => TransactionMapper.ToModel(d)).ToList()
             };
         }
 
         public static Asset ToDomain(AssetModel assetModel)
         {
-            var deposits = assetModel.Deposits.Select(d => DepositMapper.ToDomain(d)).ToList();
+            var deposits = assetModel.Transactions.Select(d => TransactionMapper.ToDomain(d)).ToList();
             return new Asset(assetModel.AssetId, assetModel.AccountId, assetModel.AssetName, deposits);
         }
     }

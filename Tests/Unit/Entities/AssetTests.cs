@@ -22,7 +22,7 @@ namespace Tests.Unit.Entities
             asset.AccountId.Should().Be(accountId);
             asset.AssetName.Should().Be(assetName);
             asset.Balance.Should().Be(0);
-            asset.Deposits.Should().BeEmpty();
+            asset.Transactions.Should().BeEmpty();
         }
 
         [Theory]
@@ -59,14 +59,14 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit = Deposit.Create(asset.AssetId, 1.5m);
+            var deposit = Transaction.Create(asset.AssetId, 1.5m);
 
             // Act
-            asset.AddDeposit(deposit);
+            asset.AddTransation(deposit);
 
             // Assert
-            asset.Deposits.Should().ContainSingle();
-            asset.Deposits.First().Should().Be(deposit);
+            asset.Transactions.Should().ContainSingle();
+            asset.Transactions.First().Should().Be(deposit);
             asset.Balance.Should().Be(1.5m);
         }
 
@@ -76,15 +76,15 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit1 = Deposit.Create(asset.AssetId, 1.5m);
-            var deposit2 = Deposit.Create(asset.AssetId, 2.5m);
+            var deposit1 = Transaction.Create(asset.AssetId, 1.5m);
+            var deposit2 = Transaction.Create(asset.AssetId, 2.5m);
 
             // Act
-            asset.AddDeposit(deposit1);
-            asset.AddDeposit(deposit2);
+            asset.AddTransation(deposit1);
+            asset.AddTransation(deposit2);
 
             // Assert
-            asset.Deposits.Should().HaveCount(2);
+            asset.Transactions.Should().HaveCount(2);
             asset.Balance.Should().Be(4.0m);
         }
     }

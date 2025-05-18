@@ -60,8 +60,8 @@ namespace Tests.Unit.UseCase
                     password: "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Deposit.Create(asset.AssetId, placeOrderDto.Price);
-            asset.AddDeposit(deposit);
+            var transaction = Transaction.Create(asset.AssetId, placeOrderDto.Price);
+            asset.AddTransation(transaction);
             account.AddAsset(asset);
             _accountRepositoryMock.Setup(repo => repo.GetAccountByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(account);
 

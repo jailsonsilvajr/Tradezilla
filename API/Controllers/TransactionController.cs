@@ -7,18 +7,18 @@ using System.Net;
 
 namespace API.Controllers
 {
-    [Route("api/deposits")]
+    [Route("api/transactions")]
     [ApiController]
-    public class DepositController : ControllerBase
+    public class TransactionController : ControllerBase
     {
-        [HttpPost("placeDeposit")]
-        public async Task<IActionResult> Deposit(
-            [FromServices] IDeposit _depositUseCase,
-            [FromBody] DepositDto depositDto)
+        [HttpPost("placeTransaction")]
+        public async Task<IActionResult> PlaceTransaction(
+            [FromServices] ITransaction _transactionUseCase,
+            [FromBody] TransactionDto transactionDto)
         {
             try
             {
-                await _depositUseCase.DepositAsync(depositDto);
+                await _transactionUseCase.PlaceTransactionAsync(transactionDto);
                 return Ok();
             }
             catch (ValidationException ex)

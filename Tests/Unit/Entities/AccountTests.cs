@@ -75,8 +75,8 @@ namespace Tests.Unit.Entities
                 "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Deposit.Create(asset.AssetId, 1000);
-            asset.AddDeposit(deposit);
+            var deposit = Transaction.Create(asset.AssetId, 1000);
+            asset.AddTransation(deposit);
             account.AddAsset(asset);
 
             var order = Order.Create(
@@ -102,8 +102,8 @@ namespace Tests.Unit.Entities
                 password: "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Deposit.Create(asset.AssetId, 10);
-            asset.AddDeposit(deposit);
+            var deposit = Transaction.Create(asset.AssetId, 10);
+            asset.AddTransation(deposit);
             account.AddAsset(asset);
 
             var order = Order.Create(
