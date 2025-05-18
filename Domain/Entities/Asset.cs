@@ -7,26 +7,31 @@ namespace Domain.Entities
     {
         public static readonly int MAX_ASSETNAME_LENGTH = 5;
         private static readonly AssetValidator _validator = new AssetValidator();
+        private readonly List<Deposit> _deposits = [];
 
         public Guid AssetId { get; set; }
         public Guid AccountId { get; set; }
         public string? AssetName { get; set; }
         public decimal Balance { get; private set; }
         public Account? Account { get; set; }
-        public ICollection<Deposit> Deposits { get; set; }
+        public IReadOnlyCollection<Deposit> Deposits => _deposits.AsReadOnly();
 
-        private Asset(Guid assetId, Guid accountId, string? assetName)
+        public Asset(Guid assetId, Guid accountId, string? assetName, List<Deposit> deposits)
         {
             AssetId = assetId;
             AccountId = accountId;
             AssetName = assetName;
             Balance = 0;
-            Deposits = new List<Deposit>();
+
+            foreach (var deposit in deposits)
+            {
+                AddDeposit(deposit);
+            }
         }
 
         public static Asset Create(Guid accountId, string? assetName)
         {
-            var newAsset =  new Asset(Guid.NewGuid(), accountId, assetName);
+            var newAsset =  new Asset(Guid.NewGuid(), accountId, assetName, []);
             var validationResult = _validator.Validate(newAsset);
             if (!validationResult.IsValid)
             {
@@ -38,7 +43,7 @@ namespace Domain.Entities
 
         public void AddDeposit(Deposit deposit)
         {
-            Deposits.Add(deposit);
+            _deposits.Add(deposit);
             Balance += deposit.Quantity;
         }
     }

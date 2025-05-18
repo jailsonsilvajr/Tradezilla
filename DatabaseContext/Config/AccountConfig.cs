@@ -1,12 +1,12 @@
-﻿using Domain.Entities;
+﻿using DatabaseContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseContext.Config
 {
-    public class AccountConfig : IEntityTypeConfiguration<Account>
+    public class AccountConfig : IEntityTypeConfiguration<AccountModel>
     {
-        public void Configure(EntityTypeBuilder<Account> builder)
+        public void Configure(EntityTypeBuilder<AccountModel> builder)
         {
             builder.ToTable("Accounts");
 
@@ -14,25 +14,19 @@ namespace DatabaseContext.Config
 
             builder.Property(x => x.Name)
                 .HasColumnType("varchar")
-                .HasMaxLength(Account.MAX_NAME_LENGTH);
+                .HasMaxLength(100);
 
             builder.Property(x => x.Email)
                 .HasColumnType("varchar")
-                .HasMaxLength(Account.MAX_EMAIL_LENGTH);
+                .HasMaxLength(50);
 
             builder.Property(x => x.Document)
                 .HasColumnType("varchar")
-                .HasMaxLength(Account.MAX_DOCUMENT_LENGTH);
+                .HasMaxLength(11);
 
             builder.Property(x => x.Password)
                 .HasColumnType("varchar")
-                .HasMaxLength(Account.MAX_PASSWORD_LENGTH);
-
-            builder.Navigation(nameof(Account.Assets))
-                .HasField("_assets");
-
-            builder.Navigation(nameof(Account.Orders))
-                .HasField("_orders");
+                .HasMaxLength(14);
 
             builder.HasIndex(x => x.Document)
                 .IsUnique();

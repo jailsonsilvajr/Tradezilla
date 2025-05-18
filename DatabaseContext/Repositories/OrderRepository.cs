@@ -1,4 +1,5 @@
 ﻿using Application.Ports.Driven;
+using DatabaseContext.Mappers;
 using Domain.Entities;
 
 namespace DatabaseContext.Repositories
@@ -14,9 +15,8 @@ namespace DatabaseContext.Repositories
 
         public void RegisterOrder(Order order)
         {
-            _context
-                .Orders
-                .Add(order);
+            var orderModel = OrderMapper.ToModel(order);
+            _context.Orders.Add(orderModel);
         }
     }
 }

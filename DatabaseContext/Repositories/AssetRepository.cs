@@ -1,4 +1,5 @@
 ﻿using Application.Ports.Driven;
+using DatabaseContext.Mappers;
 using Domain.Entities;
 
 namespace DatabaseContext.Repositories
@@ -14,7 +15,8 @@ namespace DatabaseContext.Repositories
 
         public void Insert(Asset asset)
         {
-            _context.Assets.Add(asset);
+            var assetModel = AssetMapper.ToModel(asset);
+            _context.Assets.Add(assetModel);
         }
     }
 }

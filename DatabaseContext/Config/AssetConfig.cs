@@ -1,12 +1,12 @@
-﻿using Domain.Entities;
+﻿using DatabaseContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseContext.Config
 {
-    public class AssetConfig : IEntityTypeConfiguration<Asset>
+    public class AssetConfig : IEntityTypeConfiguration<AssetModel>
     {
-        public void Configure(EntityTypeBuilder<Asset> builder)
+        public void Configure(EntityTypeBuilder<AssetModel> builder)
         {
             builder
                 .ToTable("Assets");
@@ -18,7 +18,7 @@ namespace DatabaseContext.Config
                 .Property(asset => asset.AssetName)
                 .IsRequired()
                 .HasColumnType("varchar")
-                .HasMaxLength(Asset.MAX_ASSETNAME_LENGTH);
+                .HasMaxLength(5);
 
             builder.Property(d => d.Balance)
                 .HasColumnType("decimal(18,2)");

@@ -1,24 +1,24 @@
-﻿using Domain.Entities;
+﻿using DatabaseContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseContext.Config
 {
-    public class OrderConfig : IEntityTypeConfiguration<Order>
+    public class OrderConfig : IEntityTypeConfiguration<OrderModel>
     {
-        public void Configure(EntityTypeBuilder<Order> builder)
+        public void Configure(EntityTypeBuilder<OrderModel> builder)
         {
             builder.ToTable("Orders");
             builder.HasKey(order => order.OrderId);
 
             builder.Property(order => order.Market)
                 .HasColumnType("varchar")
-                .HasMaxLength(Order.MAX_MARKET_LENGTH)
+                .HasMaxLength(7)
                 .IsRequired();
 
             builder.Property(order => order.Side)
                 .HasColumnType("varchar")
-                .HasMaxLength(Order.MAX_SIDE_LENGTH)
+                .HasMaxLength(5)
                 .IsRequired();
 
             builder.Property(order => order.Quantity)
@@ -38,7 +38,7 @@ namespace DatabaseContext.Config
 
             builder.Property(order => order.Status)
                 .HasColumnType("varchar")
-                .HasMaxLength(Order.MAX_STATUS_LENGTH)
+                .HasMaxLength(10)
                 .IsRequired();
 
             builder
