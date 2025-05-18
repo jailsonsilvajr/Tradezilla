@@ -7,5 +7,6 @@ namespace Application.Ports.Driven
         void RegisterAccount(Account account);
         Task<Account?> GetAccountByDocumentAsync(string document);
         Task<Account?> GetAccountByAccountIdAsync(Guid accountId);
+        Task RegisterOrdersAsync(Account account);
     }
 }

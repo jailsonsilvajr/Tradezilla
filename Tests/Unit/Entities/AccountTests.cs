@@ -91,5 +91,48 @@ namespace Tests.Unit.Entities
             account.Orders.Should().ContainSingle();
             account.Orders.First().Should().Be(order);
         }
+
+        [Fact]
+        public void AccountWithoutBalance_ThrowsInsufficientBalanceException()
+        {
+            var account = Account.Create(
+                name: "John Doe",
+                email: "johndoe@gmail.com",
+                document: "58865866012",
+                password: "asdQWE123");
+
+            var asset = Asset.Create(account.AccountId, "USD");
+            var deposit = Deposit.Create(asset.AssetId, 10);
+            asset.AddDeposit(deposit);
+            account.AddAsset(asset);
+
+            var order = Order.Create(
+                account.AccountId,
+                "BTC/USD",
+                "Buy",
+                100,
+                200);
+
+            Assert.Throws<InsufficientBalanceException>(() => account.AddOrder(order));
+        }
+
+        [Fact]
+        public void AddOrder_WithNonexistentAsset_ShouldThrowEntityNotFoundException()
+        {
+            var account = Account.Create(
+                "John Doe",
+                "johndoe@gmail.com",
+                "58865866012",
+                "asdQWE123");
+
+            var order = Order.Create(
+                account.AccountId,
+                "BTC/USD",
+                "Buy",
+                100,
+                200);
+
+            Assert.Throws<EntityNotFoundException>(() => account.AddOrder(order));
+        }
     }
 }
