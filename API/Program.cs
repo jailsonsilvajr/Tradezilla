@@ -19,7 +19,6 @@ builder.Services.AddScoped<IDeposit, DepositUseCase>();
 builder.Services.AddScoped<IGetAccount, GetAccountUseCase>();
 builder.Services.AddScoped<IPlaceOrder, PlaceOrderUseCase>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
