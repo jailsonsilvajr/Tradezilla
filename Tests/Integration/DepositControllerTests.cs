@@ -13,7 +13,7 @@ namespace Tests.Integration
         {
             var accountId = await SignUp("61368060021");
 
-            var depositRequestUri = "/api/deposit";
+            var depositRequestUri = "/api/deposits/placeDeposit";
             var depositJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
@@ -23,7 +23,7 @@ namespace Tests.Integration
             var depositContent = new StringContent(depositJson, Encoding.UTF8, "application/json");
             await _client.PostAsync(depositRequestUri, depositContent);
 
-            var accountRequestUri = $"/api/account?accountId={accountId}";
+            var accountRequestUri = $"/api/accounts/getAccount?accountId={accountId}";
             var accountResponse = await _client.GetAsync(accountRequestUri);
 
             var accountResponseContent = await accountResponse.Content.ReadAsStringAsync();
@@ -39,7 +39,7 @@ namespace Tests.Integration
         [Fact]
         public async Task ShouldNotCreateAnDepositWithAnInvalidData()
         {
-            var requestUri = "/api/deposit";
+            var requestUri = "/api/deposits/placeDeposit";
             var json = JsonConvert.SerializeObject(new { });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -57,7 +57,7 @@ namespace Tests.Integration
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposit", content);
+            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -80,7 +80,7 @@ namespace Tests.Integration
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposit", content);
+            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -108,7 +108,7 @@ namespace Tests.Integration
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposit", content);
+            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -135,7 +135,7 @@ namespace Tests.Integration
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposit", content);
+            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);

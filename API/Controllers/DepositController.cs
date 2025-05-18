@@ -7,11 +7,11 @@ using System.Net;
 
 namespace API.Controllers
 {
-    [Route("api/deposit")]
+    [Route("api/deposits")]
     [ApiController]
     public class DepositController : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("placeDeposit")]
         public async Task<IActionResult> Deposit(
             [FromServices] IDeposit _depositUseCase,
             [FromBody] DepositDto depositDto)
