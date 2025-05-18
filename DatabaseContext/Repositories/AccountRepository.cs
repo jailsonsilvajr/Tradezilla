@@ -1,4 +1,5 @@
 ﻿using Application.Ports.Driven;
+using DatabaseContext.Mappers;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,25 +16,32 @@ namespace DatabaseContext.Repositories
 
         public void RegisterAccount(Account account)
         {
+            var accountModel = AccountMapper.ToModel(account);
+
             _context
                 .Accounts
-                .Add(account);
+                .Add(accountModel);
         }
 
         public async Task<Account?> GetAccountByDocumentAsync(string document)
         {
-            return await _context
+            var accountModel = await _context
                 .Accounts
                 .FirstOrDefaultAsync(a => a.Document == document);
+
+            return accountModel is null ? null : AccountMapper.ToDomain(accountModel);
         }
 
         public async Task<Account?> GetAccountByAccountIdAsync(Guid accountId)
         {
-            return await _context
+            var accountModel = await _context
                 .Accounts
                 .Include(a => a.Assets)
+                    .ThenInclude(asset => asset.Deposits)
                 .Include(a => a.Orders)
                 .FirstOrDefaultAsync(a => a.AccountId == accountId);
+
+            return accountModel is null ? null : AccountMapper.ToDomain(accountModel);
         }
     }
 }

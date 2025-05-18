@@ -21,7 +21,7 @@ namespace Domain.Entities
         public string? Status { get; set; }
         public Account? Account { get; set; }
 
-        private Order(
+        public Order(
             Guid orderId, Guid accountId, string? market, 
             string? side, int quantity, decimal price, 
             DateTime createdAt, string? status)

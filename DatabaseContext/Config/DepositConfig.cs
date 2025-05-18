@@ -1,12 +1,12 @@
-﻿using Domain.Entities;
+﻿using DatabaseContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseContext.Config
 {
-    public class DepositConfig : IEntityTypeConfiguration<Deposit>
+    public class DepositConfig : IEntityTypeConfiguration<DepositModel>
     {
-        public void Configure(EntityTypeBuilder<Deposit> builder)
+        public void Configure(EntityTypeBuilder<DepositModel> builder)
         {
             builder.ToTable("Deposits");
             

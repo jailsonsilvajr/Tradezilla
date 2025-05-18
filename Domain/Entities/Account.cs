@@ -10,8 +10,8 @@ namespace Domain.Entities
         public static readonly int MAX_DOCUMENT_LENGTH = 11;
         public static readonly int MAX_PASSWORD_LENGTH = 14;
         private static readonly AccountValidator _validator = new AccountValidator();
-        private readonly List<Order> _orders;
-        private readonly List<Asset> _assets;
+        private readonly List<Asset> _assets = [];
+        private readonly List<Order> _orders = [];
 
         public Guid AccountId { get; }
         public string? Name { get; }
@@ -21,20 +21,28 @@ namespace Domain.Entities
         public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
         public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
-        private Account(Guid accountId, string? name, string? email, string? document, string? password)
+        public Account(Guid accountId, string? name, string? email, string? document, string? password, List<Asset> assets, List<Order> orders)
         {
             AccountId = accountId;
             Name = name;
             Email = email;
             Document = CleanDocument(document);
             Password = password;
-            _assets = [];
-            _orders = [];
+
+            foreach (var asset in assets)
+            {
+                AddAsset(asset);
+            }
+
+            foreach (var order in orders)
+            {
+                AddOrder(order);
+            }
         }
 
         public static Account Create(string? name, string? email, string? document, string? password)
         {
-            var newAccount = new Account(Guid.NewGuid(), name, email, document, password);
+            var newAccount = new Account(Guid.NewGuid(), name, email, document, password, [], []);
             var validationResult = _validator.Validate(newAccount);
             if (!validationResult.IsValid)
             {

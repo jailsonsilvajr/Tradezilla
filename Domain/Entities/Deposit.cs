@@ -11,7 +11,7 @@ namespace Domain.Entities
         public decimal Quantity { get; }
         public Asset? Asset { get; }
 
-        private Deposit(Guid depositId, Guid assetId, decimal quantity)
+        public Deposit(Guid depositId, Guid assetId, decimal quantity)
         {
             DepositId = depositId;
             AssetId = assetId;

@@ -31,7 +31,6 @@ namespace Application.UseCases
             if (asset is null)
             {
                 asset = Asset.Create(depositDto.AccountId, depositDto.AssetName);
-                _assetRepository.Insert(asset);
             }
 
             var deposit = Deposit.Create(
@@ -40,6 +39,7 @@ namespace Application.UseCases
 
             asset.AddDeposit(deposit);
 
+            _assetRepository.Insert(asset);
             await _unitOfWork.SaveChangesAsync();
         }
     }

@@ -1,15 +1,15 @@
 ﻿using DatabaseContext.Config;
-using Domain.Entities;
+using DatabaseContext.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseContext
 {
     public class TradezillaContext : DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Asset> Assets { get; set; }
-        public DbSet<Deposit> Deposits { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<AccountModel> Accounts { get; set; }
+        public DbSet<AssetModel> Assets { get; set; }
+        public DbSet<DepositModel> Deposits { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
 
         public TradezillaContext(DbContextOptions<TradezillaContext> options) : base(options)
         {
