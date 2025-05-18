@@ -49,7 +49,7 @@ namespace Tests.Integration
 
         protected async Task<Guid> SignUp(string document)
         {
-            var signupRequestUri = "/api/signup";
+            var signupRequestUri = "/api/accounts/signUp";
             var signupJson = JsonConvert.SerializeObject(new
             {
                 Name = "John Doe",
@@ -66,7 +66,7 @@ namespace Tests.Integration
 
         protected async Task MakeDeposit(Guid accountId, string assetName, int quantity)
         {
-            var depositRequestUri = "/api/deposit";
+            var depositRequestUri = "/api/deposits/placeDeposit";
             var depositJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,

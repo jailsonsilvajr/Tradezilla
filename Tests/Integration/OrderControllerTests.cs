@@ -31,7 +31,7 @@ namespace Tests.Integration
                 "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/order", content);
+            var response = await _client.PostAsync("/api/orders/placeOrder", content);
             var responseContent = await response.Content.ReadAsStringAsync();
             var orderId = JsonConvert.DeserializeObject<Guid>(responseContent);
 
@@ -68,7 +68,7 @@ namespace Tests.Integration
                 "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/order", content);
+            var response = await _client.PostAsync("/api/orders/placeOrder", content);
             var responseContent = await response.Content.ReadAsStringAsync();
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
@@ -101,7 +101,7 @@ namespace Tests.Integration
                 "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/order", content);
+            var response = await _client.PostAsync("/api/orders/placeOrder", content);
             var responseContent = await response.Content.ReadAsStringAsync();
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
@@ -137,7 +137,7 @@ namespace Tests.Integration
                 "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/order", content);
+            var response = await _client.PostAsync("/api/orders/placeOrder", content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);

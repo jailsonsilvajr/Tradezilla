@@ -7,11 +7,11 @@ using System.Net;
 
 namespace API.Controllers
 {
-    [Route("api/order")]
+    [Route("api/orders")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("placeOrder")]
         public async Task<IActionResult> PlaceOrder(
             [FromServices] IPlaceOrder _placeOrder,
             [FromBody] PlaceOrderDto placeOrderDto)
