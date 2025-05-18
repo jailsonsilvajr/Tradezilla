@@ -11,7 +11,7 @@ namespace Domain.Validators
                 .NotEmpty()
                 .WithMessage("AssetId cannot be empty");
 
-            RuleFor(transaction => transaction.Value)
+            RuleFor(transaction => transaction.Quantity)
                 .NotEqual(0)
                 .WithMessage("Value cannot be 0");
         }

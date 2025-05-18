@@ -71,7 +71,7 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Value = value
+                Quantity = value
             });
 
             var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");

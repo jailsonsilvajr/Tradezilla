@@ -18,7 +18,7 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Value = 10
+                Quantity = 10
             });
             var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
             await _client.PostAsync(transactionRequestUri, transactionContent);
@@ -53,7 +53,7 @@ namespace Tests.Integration
             var json = JsonConvert.SerializeObject(new
             {
                 AssetName = "BTC",
-                Value = 10
+                Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -76,7 +76,7 @@ namespace Tests.Integration
             {
                 AccountId = Guid.Empty,
                 AssetName = "BTC",
-                Value = 10
+                Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -104,7 +104,7 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Value = 10
+                Quantity = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -129,7 +129,7 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Value = 0
+                Quantity = 0
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
