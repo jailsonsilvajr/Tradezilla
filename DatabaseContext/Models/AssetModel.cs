@@ -7,6 +7,6 @@
         public string? AssetName { get; set; }
         public decimal Balance { get; set; }
         public AccountModel? Account { get; set; }
-        public ICollection<DepositModel> Deposits { get; set; } = [];
+        public ICollection<TransactionModel> Transactions { get; set; } = [];
     }
 }

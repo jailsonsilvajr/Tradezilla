@@ -6,22 +6,22 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class DepositControllerTests : BaseControllerTests
+    public class TransactionControllerTests : BaseControllerTests
     {
         [Fact]
-        public async Task MustMakeADeposit()
+        public async Task MustMakeATransaction()
         {
             var accountId = await SignUp("61368060021");
 
-            var depositRequestUri = "/api/deposits/placeDeposit";
-            var depositJson = JsonConvert.SerializeObject(new
+            var transactionRequestUri = "/api/transactions/placeTransaction";
+            var transactionJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Quantity = 10
+                Value = 10
             });
-            var depositContent = new StringContent(depositJson, Encoding.UTF8, "application/json");
-            await _client.PostAsync(depositRequestUri, depositContent);
+            var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
+            await _client.PostAsync(transactionRequestUri, transactionContent);
 
             var accountRequestUri = $"/api/accounts/getAccount?accountId={accountId}";
             var accountResponse = await _client.GetAsync(accountRequestUri);
@@ -37,9 +37,9 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidData()
+        public async Task ShouldNotCreateAnTransactionWithAnInvalidData()
         {
-            var requestUri = "/api/deposits/placeDeposit";
+            var requestUri = "/api/transactions/placeTransaction";
             var json = JsonConvert.SerializeObject(new { });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -48,16 +48,16 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnDepositWithAnNullAccountId()
+        public async Task ShouldNotCreateAnTransactionWithAnNullAccountId()
         {
             var json = JsonConvert.SerializeObject(new
             {
                 AssetName = "BTC",
-                Quantity = 10
+                Value = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
+            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -70,17 +70,17 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnDepositWithAnEmptyAccountId()
+        public async Task ShouldNotCreateAnTransactionWithAnEmptyAccountId()
         {
             var json = JsonConvert.SerializeObject(new
             {
                 AccountId = Guid.Empty,
                 AssetName = "BTC",
-                Quantity = 10
+                Value = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
+            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -96,7 +96,7 @@ namespace Tests.Integration
         [InlineData(null, "53688039076")]
         [InlineData("", "15142888006")]
         [InlineData("BTCBTC", "16599447082")]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidAssetName(string? assetName, string document)
+        public async Task ShouldNotCreateAnTransactionWithAnInvalidAssetName(string? assetName, string document)
         {
             var accountId = await SignUp(document);
 
@@ -104,11 +104,11 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Quantity = 10
+                Value = 10
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
+            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -120,22 +120,20 @@ namespace Tests.Integration
             Assert.Contains($"AssetName must be between 1 and {Asset.MAX_ASSETNAME_LENGTH} characters long", errorResponseDto.ErrorMessages);
         }
 
-        [Theory]
-        [InlineData(0, "91921373008")]
-        [InlineData(-1, "20493335013")]
-        public async Task ShouldNotCreateAnDepositWithAnInvalidQuantity(int quantity, string document)
+        [Fact]
+        public async Task ShouldNotCreateAnTransactionWithAnInvalidValue()
         {
-            var accountId = await SignUp(document);
+            var accountId = await SignUp("91921373008");
 
             var json = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Quantity = quantity
+                Value = 0
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/deposits/placeDeposit", content);
+            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -144,7 +142,7 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains("Quantity must be greater than 0", errorResponseDto.ErrorMessages);
+            Assert.Contains("Value cannot be 0", errorResponseDto.ErrorMessages);
         }
     }
 }

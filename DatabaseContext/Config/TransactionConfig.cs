@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseContext.Config
 {
-    public class DepositConfig : IEntityTypeConfiguration<DepositModel>
+    public class TransactionConfig : IEntityTypeConfiguration<TransactionModel>
     {
-        public void Configure(EntityTypeBuilder<DepositModel> builder)
+        public void Configure(EntityTypeBuilder<TransactionModel> builder)
         {
             builder.ToTable("Deposits");
             
@@ -17,7 +17,7 @@ namespace DatabaseContext.Config
 
             builder
                 .HasOne(d => d.Asset)
-                .WithMany(a => a.Deposits)
+                .WithMany(a => a.Transactions)
                 .HasForeignKey(d => d.AssetId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

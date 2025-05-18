@@ -14,7 +14,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("61368060021");
-            await MakeDeposit(accountId, "BTC", 1);
+            await MakeTransaction(accountId, "BTC", 1);
 
             var placeOrderDto = new PlaceOrderDto
             {
@@ -84,7 +84,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("74500587071");
-            await MakeDeposit(accountId, "USD", 1);
+            await MakeTransaction(accountId, "USD", 1);
 
             var placeOrderDto = new PlaceOrderDto
             {
@@ -120,7 +120,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("93618553013");
-            await MakeDeposit(accountId, "BTC", 1);
+            await MakeTransaction(accountId, "BTC", 1);
 
             var placeOrderDto = new PlaceOrderDto
             {

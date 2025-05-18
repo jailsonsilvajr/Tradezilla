@@ -64,18 +64,18 @@ namespace Tests.Integration
             return JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
         }
 
-        protected async Task MakeDeposit(Guid accountId, string assetName, int quantity)
+        protected async Task MakeTransaction(Guid accountId, string assetName, int value)
         {
-            var depositRequestUri = "/api/deposits/placeDeposit";
-            var depositJson = JsonConvert.SerializeObject(new
+            var transactionRequestUri = "/api/transactions/placeTransaction";
+            var transactionJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Quantity = quantity
+                Value = value
             });
 
-            var depositContent = new StringContent(depositJson, Encoding.UTF8, "application/json");
-            await _client.PostAsync(depositRequestUri, depositContent);
+            var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
+            await _client.PostAsync(transactionRequestUri, transactionContent);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DatabaseContext.Models
 {
-    public class DepositModel
+    public class TransactionModel
     {
         public Guid DepositId { get; set; }
         public Guid AssetId { get; set; }
