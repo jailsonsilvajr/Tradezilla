@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using Application.DTOs;
 using Domain.Entities;
+using Domain.Enums;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -9,16 +10,17 @@ namespace Tests.Integration
     public class TransactionControllerTests : BaseControllerTests
     {
         [Fact]
-        public async Task MustMakeATransaction()
+        public async Task MustMakeACreditTransaction()
         {
             var accountId = await SignUp("61368060021");
 
-            var transactionRequestUri = "/api/transactions/placeTransaction";
+            var transactionRequestUri = "/api/transactions/placeCredit";
             var transactionJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Quantity = 10
+                Quantity = 10,
+                TransactionType = (int)TransactionType.Credit
             });
             var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
             await _client.PostAsync(transactionRequestUri, transactionContent);
@@ -37,9 +39,9 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnTransactionWithAnInvalidData()
+        public async Task ShouldNotCreateAnCreditTransactionWithAnInvalidData()
         {
-            var requestUri = "/api/transactions/placeTransaction";
+            var requestUri = "/api/transactions/placeCredit";
             var json = JsonConvert.SerializeObject(new { });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -48,16 +50,17 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnTransactionWithAnNullAccountId()
+        public async Task ShouldNotCreateAnCreditTransactionWithAnNullAccountId()
         {
             var json = JsonConvert.SerializeObject(new
             {
                 AssetName = "BTC",
-                Quantity = 10
+                Quantity = 10,
+                TransactionType = (int)TransactionType.Credit
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
+            var response = await _client.PostAsync("/api/transactions/placeCredit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -70,17 +73,18 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnTransactionWithAnEmptyAccountId()
+        public async Task ShouldNotCreateAnCreditTransactionWithAnEmptyAccountId()
         {
             var json = JsonConvert.SerializeObject(new
             {
                 AccountId = Guid.Empty,
                 AssetName = "BTC",
-                Quantity = 10
+                Quantity = 10,
+                TransactionType = (int)TransactionType.Credit
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
+            var response = await _client.PostAsync("/api/transactions/placeCredit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -96,7 +100,7 @@ namespace Tests.Integration
         [InlineData(null, "53688039076")]
         [InlineData("", "15142888006")]
         [InlineData("BTCBTC", "16599447082")]
-        public async Task ShouldNotCreateAnTransactionWithAnInvalidAssetName(string? assetName, string document)
+        public async Task ShouldNotCreateAnCreditTransactionWithAnInvalidAssetName(string? assetName, string document)
         {
             var accountId = await SignUp(document);
 
@@ -104,11 +108,12 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Quantity = 10
+                Quantity = 10,
+                TransactionType = (int)TransactionType.Credit
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
+            var response = await _client.PostAsync("/api/transactions/placeCredit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);
@@ -121,7 +126,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task ShouldNotCreateAnTransactionWithAnInvalidValue()
+        public async Task ShouldNotCreateAnCreditTransactionWithAnInvalidValue()
         {
             var accountId = await SignUp("91921373008");
 
@@ -129,11 +134,12 @@ namespace Tests.Integration
             {
                 AccountId = accountId,
                 AssetName = "BTC",
-                Quantity = 0
+                Quantity = 0,
+                TransactionType = (int)TransactionType.Credit
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync("/api/transactions/placeTransaction", content);
+            var response = await _client.PostAsync("/api/transactions/placeCredit", content);
 
             Assert.NotNull(response);
             Assert.Equal(422, (int)response.StatusCode);

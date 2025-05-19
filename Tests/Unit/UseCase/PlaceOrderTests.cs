@@ -2,6 +2,7 @@
 using Application.Ports.Driven;
 using Application.UseCases;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Moq;
 
@@ -60,8 +61,8 @@ namespace Tests.Unit.UseCase
                     password: "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var transaction = Transaction.Create(asset.AssetId, placeOrderDto.Price);
-            asset.AddTransation(transaction);
+            var transaction = Transaction.Create(asset.AssetId, placeOrderDto.Price, TransactionType.Credit);
+            asset.AddTransaction(transaction);
             account.AddAsset(asset);
             _accountRepositoryMock.Setup(repo => repo.GetAccountByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(account);
 

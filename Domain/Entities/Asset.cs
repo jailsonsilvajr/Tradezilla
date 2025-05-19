@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using Domain.Enums;
+using Domain.Exceptions;
 using Domain.Validators;
 
 namespace Domain.Entities
@@ -25,7 +26,7 @@ namespace Domain.Entities
 
             foreach (var transation in transactions)
             {
-                AddTransation(transation);
+                AddTransaction(transation);
             }
         }
 
@@ -41,10 +42,33 @@ namespace Domain.Entities
             return newAsset;
         }
 
-        public void AddTransation(Transaction transation)
+        public void AddTransaction(Transaction transaction)
         {
+            if (transaction.TransactionType == TransactionType.Credit)
+            {
+                AddCreditTransaction(transaction);
+            }
+            else
+            {
+                AddDebitTransaction(transaction);
+            }
+        }
+
+        private void AddCreditTransaction(Transaction transaction)
+        {
+            _transactions.Add(transaction);
+            Balance += transaction.Quantity;
+        }
+
+        private void AddDebitTransaction(Transaction transation)
+        {
+            if (Balance < transation.Quantity)
+            {
+                throw new InsufficientBalanceException($"Insufficient balance to perform transaction");
+            }
+            
             _transactions.Add(transation);
-            Balance += transation.Quantity;
+            Balance -= transation.Quantity;
         }
     }
 }

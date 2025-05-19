@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using FluentAssertions;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Tests.Unit.Entities
             var value = 1.5m;
 
             // Act
-            var transaction = Transaction.Create(assetId, value);
+            var transaction = Transaction.Create(assetId, value, TransactionType.Credit);
 
             // Assert
             transaction.Should().NotBeNull();
@@ -32,7 +33,7 @@ namespace Tests.Unit.Entities
             var value = 1.5m;
 
             // Act & Assert
-            var action = () => Transaction.Create(assetId, value);
+            var action = () => Transaction.Create(assetId, value, TransactionType.Credit);
             action.Should().Throw<ValidationException>()
                 .WithMessage("Invalid data to create transaction");
         }
@@ -44,7 +45,7 @@ namespace Tests.Unit.Entities
             var assetId = Guid.NewGuid();
 
             // Act & Assert
-            var action = () => Transaction.Create(assetId, 0);
+            var action = () => Transaction.Create(assetId, 0, TransactionType.Credit);
             action.Should().Throw<ValidationException>()
                 .WithMessage("Invalid data to create transaction");
         }
@@ -57,7 +58,7 @@ namespace Tests.Unit.Entities
             var value = 0.00000001m; // Teste com valor decimal muito pequeno
 
             // Act
-            var transaction = Transaction.Create(assetId, value);
+            var transaction = Transaction.Create(assetId, value, TransactionType.Credit);
 
             // Assert
             transaction.Should().NotBeNull();

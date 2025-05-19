@@ -1,5 +1,6 @@
 using API.DTOs;
 using Application.DTOs;
+using Domain.Enums;
 using FluentAssertions;
 using Newtonsoft.Json;
 using System.Net;
@@ -14,7 +15,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("61368060021");
-            await MakeTransaction(accountId, "BTC", 1);
+            await MakeTransaction(accountId, "BTC", 1, (int)TransactionType.Credit);
 
             var placeOrderDto = new PlaceOrderDto
             {
@@ -84,7 +85,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("74500587071");
-            await MakeTransaction(accountId, "USD", 1);
+            await MakeTransaction(accountId, "USD", 1, (int)TransactionType.Credit);
 
             var placeOrderDto = new PlaceOrderDto
             {
@@ -120,7 +121,7 @@ namespace Tests.Integration
         {
             // Arrange
             var accountId = await SignUp("93618553013");
-            await MakeTransaction(accountId, "BTC", 1);
+            await MakeTransaction(accountId, "BTC", 1, (int)TransactionType.Credit);
 
             var placeOrderDto = new PlaceOrderDto
             {
