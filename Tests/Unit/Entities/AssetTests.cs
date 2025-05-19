@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using FluentAssertions;
 using Xunit;
@@ -59,10 +60,10 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit = Transaction.Create(asset.AssetId, 1.5m);
+            var deposit = Transaction.Create(asset.AssetId, 1.5m, TransactionType.Credit);
 
             // Act
-            asset.AddTransation(deposit);
+            asset.AddTransaction(deposit);
 
             // Assert
             asset.Transactions.Should().ContainSingle();
@@ -76,12 +77,12 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit1 = Transaction.Create(asset.AssetId, 1.5m);
-            var deposit2 = Transaction.Create(asset.AssetId, 2.5m);
+            var deposit1 = Transaction.Create(asset.AssetId, 1.5m, TransactionType.Credit);
+            var deposit2 = Transaction.Create(asset.AssetId, 2.5m, TransactionType.Credit);
 
             // Act
-            asset.AddTransation(deposit1);
-            asset.AddTransation(deposit2);
+            asset.AddTransaction(deposit1);
+            asset.AddTransaction(deposit2);
 
             // Assert
             asset.Transactions.Should().HaveCount(2);

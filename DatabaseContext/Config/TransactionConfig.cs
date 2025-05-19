@@ -15,6 +15,9 @@ namespace DatabaseContext.Config
             builder.Property(d => d.Quantity)
                 .HasColumnType("decimal(18,2)");
 
+            builder.Property(t => t.TransactionType)
+                .IsRequired();
+
             builder
                 .HasOne(d => d.Asset)
                 .WithMany(a => a.Transactions)

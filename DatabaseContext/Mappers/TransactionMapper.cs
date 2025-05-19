@@ -1,23 +1,25 @@
 ﻿using DatabaseContext.Models;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace DatabaseContext.Mappers
 {
     public static class TransactionMapper
     {
-        public static TransactionModel ToModel(Transaction deposit)
+        public static TransactionModel ToModel(Transaction transaction)
         {
             return new TransactionModel
             {
-                TransactionId = deposit.TransactionId,
-                AssetId = deposit.AssetId,
-                Quantity = deposit.Quantity,
+                TransactionId = transaction.TransactionId,
+                AssetId = transaction.AssetId,
+                Quantity = transaction.Quantity,
+                TransactionType = (int)transaction.TransactionType
             };
         }
 
-        public static Transaction ToDomain(TransactionModel depositModel)
+        public static Transaction ToDomain(TransactionModel transactionModel)
         {
-            return new Transaction(depositModel.TransactionId, depositModel.AssetId, depositModel.Quantity);
+            return new Transaction(transactionModel.TransactionId, transactionModel.AssetId, transactionModel.Quantity, (TransactionType)transactionModel.TransactionType);
         }
     }
 }

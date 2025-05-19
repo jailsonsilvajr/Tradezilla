@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using FluentAssertions;
 
@@ -75,8 +76,8 @@ namespace Tests.Unit.Entities
                 "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Transaction.Create(asset.AssetId, 1000);
-            asset.AddTransation(deposit);
+            var transaction = Transaction.Create(asset.AssetId, 1000, TransactionType.Credit);
+            asset.AddTransaction(transaction);
             account.AddAsset(asset);
 
             var order = Order.Create(
@@ -102,8 +103,8 @@ namespace Tests.Unit.Entities
                 password: "asdQWE123");
 
             var asset = Asset.Create(account.AccountId, "USD");
-            var deposit = Transaction.Create(asset.AssetId, 10);
-            asset.AddTransation(deposit);
+            var transaction = Transaction.Create(asset.AssetId, 10, TransactionType.Credit);
+            asset.AddTransaction(transaction);
             account.AddAsset(asset);
 
             var order = Order.Create(

@@ -1,4 +1,5 @@
 ﻿using DatabaseContext;
+using Domain.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -64,14 +65,18 @@ namespace Tests.Integration
             return JsonConvert.DeserializeObject<Guid>(signupResponseContent)!;
         }
 
-        protected async Task MakeTransaction(Guid accountId, string assetName, int value)
+        protected async Task MakeTransaction(Guid accountId, string assetName, int value, int transactionType)
         {
-            var transactionRequestUri = "/api/transactions/placeTransaction";
+            var transactionRequestUri = transactionType == (int)TransactionType.Credit
+                ? "/api/transactions/placeCredit"
+                : "/api/transactions/placeDebit";
+
             var transactionJson = JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
                 AssetName = assetName,
-                Quantity = value
+                Quantity = value,
+                TransactionType = transactionType
             });
 
             var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
