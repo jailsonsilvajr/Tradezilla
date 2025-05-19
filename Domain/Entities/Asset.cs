@@ -28,18 +28,24 @@ namespace Domain.Entities
             {
                 AddTransaction(transation);
             }
+
+            Validate(this);
         }
 
         public static Asset Create(Guid accountId, string? assetName)
         {
             var newAsset =  new Asset(Guid.NewGuid(), accountId, assetName, []);
-            var validationResult = _validator.Validate(newAsset);
+            Validate(newAsset);
+            return newAsset;
+        }
+
+        private static void Validate(Asset asset)
+        {
+            var validationResult = _validator.Validate(asset);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException("Invalid data to create asset", validationResult.Errors);
             }
-
-            return newAsset;
         }
 
         public void AddTransaction(Transaction transaction)
