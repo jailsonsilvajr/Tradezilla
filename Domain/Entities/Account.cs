@@ -1,6 +1,5 @@
 ﻿using Domain.Exceptions;
 using Domain.Validators;
-using System.Security.Principal;
 
 namespace Domain.Entities
 {
@@ -39,18 +38,24 @@ namespace Domain.Entities
             {
                 AddOrder(order);
             }
+
+            Validate(this);
         }
 
         public static Account Create(string? name, string? email, string? document, string? password)
         {
             var newAccount = new Account(Guid.NewGuid(), name, email, document, password, [], []);
-            var validationResult = _validator.Validate(newAccount);
+            Validate(newAccount);
+            return newAccount;
+        }
+
+        private static void Validate(Account account)
+        {
+            var validationResult = _validator.Validate(account);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException("Invalid data to create account", validationResult.Errors);
             }
-
-            return newAccount;
         }
 
         public static string? CleanDocument(string? document)

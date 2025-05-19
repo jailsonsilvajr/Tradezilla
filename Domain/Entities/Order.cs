@@ -34,6 +34,8 @@ namespace Domain.Entities
             Price = price;
             CreatedAt = createdAt;
             Status = status;
+
+            Validate(this);
         }
 
         public static Order Create(
@@ -50,13 +52,17 @@ namespace Domain.Entities
                 DateTime.UtcNow,
                 "open");
 
-            var validationResult = _validator.Validate(newOrder);
+            Validate(newOrder);
+            return newOrder;
+        }
+
+        private static void Validate(Order order)
+        {
+            var validationResult = _validator.Validate(order);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException("Invalid data to create order", validationResult.Errors);
             }
-
-            return newOrder;
         }
     }
 }
