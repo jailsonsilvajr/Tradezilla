@@ -64,5 +64,40 @@ namespace Domain.Entities
                 throw new ValidationException("Invalid data to create order", validationResult.Errors);
             }
         }
+
+        public static (Dictionary<string, int> buy, Dictionary<string, int> sell) GroupOrdersByPrecision(List<Order>? orders, int precision)
+        {
+            (Dictionary<string, int> buy, Dictionary<string, int> sell) index = new(new Dictionary<string, int>(), new Dictionary<string, int>());
+            foreach (var order in orders ?? new())
+            {
+                var price = order.Price;
+                if (precision > 0)
+                {
+                    price -= price % (decimal)Math.Pow(10, precision);
+                }
+
+                if (order.Side?.ToUpper() == "BUY")
+                {
+                    if (!index.buy.ContainsKey(price.ToString()))
+                    {
+                        index.buy[price.ToString()] = 0;
+                    }
+
+                    index.buy[price.ToString()] += order.Quantity;
+                }
+
+                if (order.Side?.ToUpper() == "SELL")
+                {
+                    if (!index.sell.ContainsKey(price.ToString()))
+                    {
+                        index.sell[price.ToString()] = 0;
+                    }
+
+                    index.sell[price.ToString()] += order.Quantity;
+                }
+            }
+
+            return index;
+        }
     }
 }
