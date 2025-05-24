@@ -19,8 +19,10 @@ builder.Services.AddScoped<ICredit, CreditUseCase>();
 builder.Services.AddScoped<IDebit, DebitUseCase>();
 builder.Services.AddScoped<IGetAccount, GetAccountUseCase>();
 builder.Services.AddScoped<IPlaceOrder, PlaceOrderUseCase>();
+builder.Services.AddScoped<IGetDepth, GetDepthUseCase>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();

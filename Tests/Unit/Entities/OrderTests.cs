@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using Domain.Exceptions;
 using FluentAssertions;
 
@@ -116,6 +117,104 @@ namespace Tests.Unit.Entities
             var order = Order.Create(accountId, market, side, quantity, price);
 
             order.Status.Should().Be("open");
+        }
+
+        [Fact]
+        public void GroupOrder_WithPrecision0()
+        {
+            var accountId = Guid.NewGuid();
+            var orders = new List<Order>()
+            {
+                Order.Create(accountId, "BTC/USD", "sell", 1, 94550),
+                Order.Create(accountId, "BTC/USD", "sell", 2, 94500),
+                Order.Create(accountId, "BTC/USD", "buy", 1, 94600)
+            };
+
+            var index = Order.GroupOrdersByPrecision(orders, 0);
+
+            index.Should().NotBeNull();
+
+            index.buy.Should().NotBeNull();
+            index.sell.Should().NotBeNull();
+
+            index.buy.Count.Should().Be(1);
+            index.buy["94600"].Should().Be(1);
+
+            index.sell["94550"].Should().Be(1);
+            index.sell["94500"].Should().Be(2);
+        }
+
+        [Fact]
+        public void GroupOrder_WithPrecision1()
+        {
+            var accountId = Guid.NewGuid();
+            var orders = new List<Order>()
+            {
+                Order.Create(accountId, "BTC/USD", "sell", 1, 94550),
+                Order.Create(accountId, "BTC/USD", "sell", 2, 94500),
+                Order.Create(accountId, "BTC/USD", "buy", 1, 94600)
+            };
+
+            var index = Order.GroupOrdersByPrecision(orders, 1);
+
+            index.Should().NotBeNull();
+
+            index.buy.Should().NotBeNull();
+            index.sell.Should().NotBeNull();
+
+            index.buy.Count.Should().Be(1);
+            index.buy["94600"].Should().Be(1);
+
+            index.sell["94550"].Should().Be(1);
+            index.sell["94500"].Should().Be(2);
+        }
+
+        [Fact]
+        public void GroupOrder_WithPrecision2()
+        {
+            var accountId = Guid.NewGuid();
+            var orders = new List<Order>()
+            {
+                Order.Create(accountId, "BTC/USD", "sell", 1, 94550),
+                Order.Create(accountId, "BTC/USD", "sell", 2, 94500),
+                Order.Create(accountId, "BTC/USD", "buy", 1, 94600)
+            };
+
+            var index = Order.GroupOrdersByPrecision(orders, 2);
+
+            index.Should().NotBeNull();
+
+            index.buy.Should().NotBeNull();
+            index.sell.Should().NotBeNull();
+
+            index.buy.Count.Should().Be(1);
+            index.buy["94600"].Should().Be(1);
+
+            index.sell["94500"].Should().Be(3);
+        }
+
+        [Fact]
+        public void GroupOrder_WithPrecision3()
+        {
+            var accountId = Guid.NewGuid();
+            var orders = new List<Order>()
+            {
+                Order.Create(accountId, "BTC/USD", "sell", 1, 94550),
+                Order.Create(accountId, "BTC/USD", "sell", 2, 94500),
+                Order.Create(accountId, "BTC/USD", "buy", 1, 94600)
+            };
+
+            var index = Order.GroupOrdersByPrecision(orders, 3);
+
+            index.Should().NotBeNull();
+
+            index.buy.Should().NotBeNull();
+            index.sell.Should().NotBeNull();
+
+            index.buy.Count.Should().Be(1);
+            index.buy["94000"].Should().Be(1);
+
+            index.sell["94000"].Should().Be(3);
         }
     }
 }
