@@ -15,8 +15,8 @@ namespace Domain.Entities
         public string? Side { get; }
         public int Quantity { get; }
         public decimal Price { get; }
-        public int FillQuantity { get; }
-        public decimal FillPrice { get; }
+        public int FillQuantity { get; private set; }
+        public decimal FillPrice { get; private set; }
         public DateTime CreatedAt { get; }
         public string? Status { get; set; }
         public Account? Account { get; set; }
@@ -98,6 +98,31 @@ namespace Domain.Entities
             }
 
             return index;
+        }
+
+        public void SetFillQuantity(int quantity)
+        {
+            if (quantity < 0)
+            {
+                throw new ArgumentException("Fill quantity cannot be negative");
+            }
+
+            FillQuantity = quantity;
+
+            if (FillQuantity == Quantity)
+            {
+                Status = "closed";
+            }
+        }
+
+        public void SetFillPrice(decimal price)
+        {
+            if (price < 0)
+            {
+                throw new ArgumentException("Fill price cannot be negative");
+            }
+
+            FillPrice = price;
         }
     }
 }

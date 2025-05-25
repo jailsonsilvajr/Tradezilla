@@ -1,7 +1,9 @@
 using API.DTOs;
 using Application.DTOs;
+using Domain.Entities;
 using Domain.Enums;
 using FluentAssertions;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -142,6 +144,61 @@ namespace Tests.Integration
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
+        }
+
+        [Fact]
+        public async Task MustExecuteOrder()
+        {
+            var accountIdSell = await SignUp("93618553013");
+            await MakeTransaction(accountIdSell, "BTC", 1, (int)TransactionType.Credit);
+            var placeOrderSellDto = new PlaceOrderDto
+            {
+                AccountId = accountIdSell,
+                MarketId = "BTC/USD",
+                Side = "Sell",
+                Quantity = 1,
+                Price = 94000m
+            };
+
+            var contentSell = new StringContent(
+                JsonConvert.SerializeObject(placeOrderSellDto),
+                Encoding.UTF8,
+                "application/json");
+
+            await _client.PostAsync("/api/orders/placeOrder", contentSell);
+
+            var accountIdBuy = await SignUp("74500587071");
+            await MakeTransaction(accountIdBuy, "USD", 1, (int)TransactionType.Credit);
+            var placeOrderBuyDto = new PlaceOrderDto
+            {
+                AccountId = accountIdBuy,
+                MarketId = "BTC/USD",
+                Side = "Buy",
+                Quantity = 1,
+                Price = 94500m
+            };
+
+            var contentBuy = new StringContent(
+                JsonConvert.SerializeObject(placeOrderBuyDto),
+                Encoding.UTF8,
+                "application/json");
+
+            await _client.PostAsync("/api/orders/placeOrder", contentBuy);
+            var getDepthOutput = await _client.GetAsync($"/api/depths/getDepth?marketId=BTC/USD&precision=0");
+
+            getDepthOutput.Should().NotBeNull();
+            getDepthOutput.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseContent = await getDepthOutput.Content.ReadAsStringAsync();
+            var depthDto = JsonConvert.DeserializeObject<DepthDto>(responseContent);
+
+            depthDto.Should().NotBeNull();
+
+            depthDto.Buys.Should().NotBeNull();
+            depthDto.Sells.Should().NotBeNull();
+
+            depthDto.Buys.Count.Should().Be(0);
+            depthDto.Sells.Count.Should().Be(0);
         }
     }
 } 

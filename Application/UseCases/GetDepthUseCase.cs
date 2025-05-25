@@ -16,7 +16,7 @@ namespace Application.UseCases
 
         public async Task<DepthDto> ExecuteAsync(string marketId, int precision)
         {
-            var orders = await _orderRepository.GetOrdersByMarketIdAsync(marketId);
+            var orders = await _orderRepository.GetOrdersOpensByMarketIdAsync(marketId);
             var index = Order.GroupOrdersByPrecision(orders, precision);
 
             var depthDto = new DepthDto();
