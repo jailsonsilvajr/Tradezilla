@@ -10,13 +10,16 @@ namespace Application.UseCases
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IExecuteOrder _executeOrder;
 
         public PlaceOrderUseCase(
             IAccountRepository accountRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IExecuteOrder executeOrder)
         {
             _accountRepository = accountRepository;
             _unitOfWork = unitOfWork;
+            _executeOrder = executeOrder;
         }
 
         public async Task<Guid> PlaceOrder(PlaceOrderDto placeOrderDto)
@@ -38,6 +41,8 @@ namespace Application.UseCases
 
             await _accountRepository.RegisterOrdersAsync(account);
             await _unitOfWork.SaveChangesAsync();
+
+            await _executeOrder.ExecuteOrderAsync(placeOrderDto.MarketId!);
 
             return order.OrderId;
         }

@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Ports.Driven;
+using Application.Ports.Driving;
 using Application.UseCases;
 using Domain.Entities;
 using Domain.Enums;
@@ -13,15 +14,18 @@ namespace Tests.Unit.UseCase
         private readonly Mock<IAccountRepository> _accountRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly PlaceOrderUseCase _placeOrderUseCase;
+        private readonly Mock<IExecuteOrder> _executeOrderMock;
 
         public PlaceOrderTests()
         {
             _accountRepositoryMock = new Mock<IAccountRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
+            _executeOrderMock = new Mock<IExecuteOrder>();
 
             _placeOrderUseCase = new PlaceOrderUseCase(
                 _accountRepositoryMock.Object,
-                _unitOfWorkMock.Object);
+                _unitOfWorkMock.Object,
+                _executeOrderMock.Object);
         }
 
         [Fact]
