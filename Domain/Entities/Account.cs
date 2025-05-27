@@ -1,11 +1,11 @@
 ﻿using Domain.Exceptions;
 using Domain.Validators;
+using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
     public class Account
     {
-        public static readonly int MAX_NAME_LENGTH = 100;
         public static readonly int MAX_EMAIL_LENGTH = 50;
         public static readonly int MAX_DOCUMENT_LENGTH = 11;
         public static readonly int MAX_PASSWORD_LENGTH = 14;
@@ -13,18 +13,19 @@ namespace Domain.Entities
         private readonly List<Asset> _assets = [];
         private readonly List<Order> _orders = [];
 
+        private readonly Name _name;
+
         public Guid AccountId { get; }
-        public string? Name { get; }
         public string? Email { get; }
         public string? Document { get; }
         public string? Password { get; }
         public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
         public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
-        public Account(Guid accountId, string? name, string? email, string? document, string? password, List<Asset> assets, List<Order> orders)
+        public Account(Guid accountId, string name, string? email, string? document, string? password, List<Asset> assets, List<Order> orders)
         {
             AccountId = accountId;
-            Name = name;
+            _name = new Name(name);
             Email = email;
             Document = CleanDocument(document);
             Password = password;
@@ -41,6 +42,8 @@ namespace Domain.Entities
 
             Validate(this);
         }
+
+        public string GetName() => _name.GetValue();
 
         public static Account Create(string? name, string? email, string? document, string? password)
         {

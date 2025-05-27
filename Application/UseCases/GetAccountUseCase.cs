@@ -21,7 +21,7 @@ namespace Application.UseCases
                 ? throw new EntityNotFoundException($"Account {accountId} not found")
                 : new AccountDto
                 {
-                    Name = account.Name,
+                    Name = account.GetName(),
                     Email = account.Email,
                     Document = account.Document,
                     Assets = account.Assets.Select(d => new AssetDto

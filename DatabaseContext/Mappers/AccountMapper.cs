@@ -10,7 +10,7 @@ namespace DatabaseContext.Mappers
             return new AccountModel
             {
                 AccountId = account.AccountId,
-                Name = account.Name,
+                Name = account.GetName(),
                 Email = account.Email,
                 Document = account.Document,
                 Password = account.Password,

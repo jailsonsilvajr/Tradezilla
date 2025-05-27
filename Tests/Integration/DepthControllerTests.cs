@@ -29,7 +29,7 @@ namespace Tests.Integration
 
             placeOrderDto.MarketId = "BTC/USD";
             placeOrderDto.Quantity = 2;
-            placeOrderDto.Price = 94600;
+            placeOrderDto.Price = 94300;
             placeOrderDto.Side = "Buy";
             content = new StringContent(JsonConvert.SerializeObject(placeOrderDto), Encoding.UTF8, "application/json");
             await _client.PostAsync("/api/orders/placeOrder", content);
@@ -50,7 +50,7 @@ namespace Tests.Integration
             depthDto.Sells.Should().NotBeNull();
 
             depthDto.Buys.Count.Should().Be(1);
-            depthDto.Buys[0].Price.Should().Be(94600);
+            depthDto.Buys[0].Price.Should().Be(94300);
             depthDto.Buys[0].Quantity.Should().Be(2);
 
             depthDto.Sells.Count.Should().Be(2);
@@ -80,7 +80,7 @@ namespace Tests.Integration
 
             placeOrderDto.MarketId = "BTC/USD";
             placeOrderDto.Quantity = 2;
-            placeOrderDto.Price = 94600;
+            placeOrderDto.Price = 94400;
             placeOrderDto.Side = "Buy";
             content = new StringContent(JsonConvert.SerializeObject(placeOrderDto), Encoding.UTF8, "application/json");
             await _client.PostAsync("/api/orders/placeOrder", content);
@@ -101,7 +101,7 @@ namespace Tests.Integration
             depthDto.Sells.Should().NotBeNull();
 
             depthDto.Buys.Count.Should().Be(1);
-            depthDto.Buys[0].Price.Should().Be(94600);
+            depthDto.Buys[0].Price.Should().Be(94400);
 
             depthDto.Sells.Count.Should().Be(1);
             depthDto.Sells[0].Price.Should().Be(94500);
