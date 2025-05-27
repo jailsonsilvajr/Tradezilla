@@ -1,8 +1,12 @@
+using Application.Handlers;
+using Application.Notifications;
 using Application.Ports.Driven;
+using Application.Ports.Driven.Mediator;
 using Application.Ports.Driving;
 using Application.UseCases;
 using DatabaseContext;
 using DatabaseContext.Repositories;
+using EventSource;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +17,9 @@ if (!env.IsEnvironment("Testing"))
     var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
     builder.Services.AddDbContext<TradezillaContext>(options => options.UseSqlServer(connectionString));
 }
+
+builder.Services.AddTransient<INotificationHandler<PlaceOrderNotification>, PlaceOrderHandler>();
+builder.Services.AddSingleton<IMediator, Mediator>();
 
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
 builder.Services.AddScoped<ICredit, CreditUseCase>();

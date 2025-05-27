@@ -1,5 +1,7 @@
 ﻿using Application.DTOs;
+using Application.Notifications;
 using Application.Ports.Driven;
+using Application.Ports.Driven.Mediator;
 using Application.Ports.Driving;
 using Domain.Entities;
 using Domain.Exceptions;
@@ -10,16 +12,16 @@ namespace Application.UseCases
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IExecuteOrder _executeOrder;
+        private readonly IMediator _mediator;
 
         public PlaceOrderUseCase(
             IAccountRepository accountRepository,
             IUnitOfWork unitOfWork,
-            IExecuteOrder executeOrder)
+            IMediator mediator)
         {
             _accountRepository = accountRepository;
             _unitOfWork = unitOfWork;
-            _executeOrder = executeOrder;
+            _mediator = mediator;
         }
 
         public async Task<Guid> PlaceOrder(PlaceOrderDto placeOrderDto)
@@ -42,7 +44,7 @@ namespace Application.UseCases
             await _accountRepository.RegisterOrdersAsync(account);
             await _unitOfWork.SaveChangesAsync();
 
-            await _executeOrder.ExecuteOrderAsync(placeOrderDto.MarketId!);
+            await _mediator.Send(new PlaceOrderNotification(order));
 
             return order.OrderId;
         }

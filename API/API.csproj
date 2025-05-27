@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseContext\DatabaseContext.csproj" />
+    <ProjectReference Include="..\EventSource\EventSource.csproj" />
   </ItemGroup>
 
 </Project>
