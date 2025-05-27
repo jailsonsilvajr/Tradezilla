@@ -2,6 +2,7 @@
 using Application.DTOs;
 using Newtonsoft.Json;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace Tests.Integration
@@ -41,32 +42,6 @@ namespace Tests.Integration
 
             var response = await _client.PostAsync(requestUri, content);
             Assert.Equal(422, (int)response.StatusCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("John")]
-        public async Task ShouldNotCreateAnAccountWithAnInvalidName(string? name)
-        {
-            var json = JsonConvert.SerializeObject(new
-            {
-                Name = name,
-                Email = "john.doe@gmail.com",
-                Document = "97456321558",
-                Password = "asdQWE123"
-            });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("/api/accounts/signUp", content);
-
-            Assert.NotNull(response);
-            Assert.Equal(422, (int)response.StatusCode);
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
-
-            Assert.NotNull(errorResponseDto);
-            Assert.Contains("Invalid name", errorResponseDto.ErrorMessages);
         }
 
         [Theory]

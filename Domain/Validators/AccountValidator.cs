@@ -8,12 +8,6 @@ namespace Domain.Validators
     {
         public AccountValidator()
         {
-            RuleFor(x => x.Name)
-                .Must(name => 
-                    !string.IsNullOrEmpty(name) 
-                    && Regex.IsMatch(name, @"[a-zA-Z] [a-zA-Z]+") 
-                    && name.Length <= Account.MAX_NAME_LENGTH)
-                .WithMessage("Invalid name");
             RuleFor(x => x.Email)
                 .Must(email => 
                     !string.IsNullOrEmpty(email) 

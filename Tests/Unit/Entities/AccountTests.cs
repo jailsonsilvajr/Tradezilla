@@ -19,7 +19,7 @@ namespace Tests.Unit.Entities
 
             account.Should().NotBeNull();
             account.AccountId.Should().NotBe(Guid.Empty);
-            account.Name.Should().Be(name);
+            account.GetName().Should().Be(name);
             account.Email.Should().Be(email);
             account.Document.Should().Be("58865866012");
             account.Password.Should().Be(password);
@@ -28,7 +28,6 @@ namespace Tests.Unit.Entities
         }
 
         [Theory]
-        [InlineData(null, "email@test.com", "12345678901", "password123")]
         [InlineData("John Doe", null, "12345678901", "password123")]
         [InlineData("John Doe", "email@test.com", null, "password123")]
         [InlineData("John Doe", "email@test.com", "12345678901", null)]
