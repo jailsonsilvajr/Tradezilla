@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{FEEB2201-A73B-4C45-B76E-9145F4A181C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSource", "EventSource\EventSource.csproj", "{277E4479-22F6-4EA0-AE92-C3E675DC79F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{FEEB2201-A73B-4C45-B76E-9145F4A181C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEEB2201-A73B-4C45-B76E-9145F4A181C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEEB2201-A73B-4C45-B76E-9145F4A181C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{277E4479-22F6-4EA0-AE92-C3E675DC79F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{277E4479-22F6-4EA0-AE92-C3E675DC79F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{277E4479-22F6-4EA0-AE92-C3E675DC79F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{277E4479-22F6-4EA0-AE92-C3E675DC79F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{5A49713B-B236-47E6-880F-E8C46E6FBE8B} = {F52F5B6F-32DD-4B3C-8310-1E737A180A78}
 		{CCB6797A-69E9-451A-91EB-C0A7B4C5ADCD} = {A82D5B49-2C09-44DF-BAB5-0E69A0F6D438}
 		{FEEB2201-A73B-4C45-B76E-9145F4A181C8} = {A82D5B49-2C09-44DF-BAB5-0E69A0F6D438}
+		{277E4479-22F6-4EA0-AE92-C3E675DC79F3} = {F52F5B6F-32DD-4B3C-8310-1E737A180A78}
 	EndGlobalSection
 EndGlobal

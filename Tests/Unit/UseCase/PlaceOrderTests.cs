@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Ports.Driven;
-using Application.Ports.Driving;
+using Application.Ports.Driven.Mediator;
 using Application.UseCases;
 using Domain.Entities;
 using Domain.Enums;
@@ -14,18 +14,18 @@ namespace Tests.Unit.UseCase
         private readonly Mock<IAccountRepository> _accountRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly PlaceOrderUseCase _placeOrderUseCase;
-        private readonly Mock<IExecuteOrder> _executeOrderMock;
+        private readonly Mock<IMediator> _mediatorMock;
 
         public PlaceOrderTests()
         {
             _accountRepositoryMock = new Mock<IAccountRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _executeOrderMock = new Mock<IExecuteOrder>();
+            _mediatorMock = new Mock<IMediator>();
 
             _placeOrderUseCase = new PlaceOrderUseCase(
                 _accountRepositoryMock.Object,
                 _unitOfWorkMock.Object,
-                _executeOrderMock.Object);
+                _mediatorMock.Object);
         }
 
         [Fact]
