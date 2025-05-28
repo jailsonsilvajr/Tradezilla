@@ -8,10 +8,6 @@ namespace Domain.Validators
     {
         public AccountValidator()
         {
-            RuleFor(x => x.Document)
-                .Must(ValidateDocument)
-                .WithMessage("Invalid document");
-
             RuleFor(x => x.Password)
                 .Must(password => 
                     !string.IsNullOrEmpty(password)
@@ -20,56 +16,6 @@ namespace Domain.Validators
                     && Regex.IsMatch(password, @"[A-Z]+")
                     && password.Length <= Account.MAX_PASSWORD_LENGTH)
                 .WithMessage("Invalid password");
-        }
-
-        private static bool ValidateDocument(string? document)
-        {
-            if (document is null)
-            {
-                return false;
-            }
-
-            document = Account.CleanDocument(document);
-
-            if (document is null || document.Length != Account.MAX_DOCUMENT_LENGTH)
-            {
-                return false;
-            }
-
-            if (AllDigitsEqual(document))
-            {
-                return false;
-            }
-
-            var digit1 = CalculateDigit(document, 10);
-            var digit2 = CalculateDigit(document, 11);
-            return ExtractDigit(document).Equals($"{digit1}{digit2}");
-        }
-
-        private static bool AllDigitsEqual(string document)
-        {
-            var firstDigit = document[0];
-            return document.All(digit => digit.Equals(firstDigit));
-        }
-
-        private static int CalculateDigit(string document, int factor)
-        {
-            var total = 0;
-            foreach (var digit in document)
-            {
-                if (factor > 1)
-                {
-                    total += (digit - '0') * factor--;
-                }
-            }
-
-            var rest = total % 11;
-            return (rest < 2) ? 0 : 11 - rest;
-        }
-
-        private static string ExtractDigit(string document)
-        {
-            return document.Substring(document.Length - 2, 2);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DatabaseContext.Mappers
                 AccountId = account.AccountId,
                 Name = account.GetName(),
                 Email = account.GetEmail(),
-                Document = account.Document,
+                Document = account.GetDocument(),
                 Password = account.Password,
                 Assets = account.Assets.Select(a => AssetMapper.ToModel(a)).ToList(),
                 Orders = account.Orders.Select(o => OrderMapper.ToModel(o)).ToList()
