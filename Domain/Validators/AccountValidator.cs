@@ -8,13 +8,6 @@ namespace Domain.Validators
     {
         public AccountValidator()
         {
-            RuleFor(x => x.Email)
-                .Must(email => 
-                    !string.IsNullOrEmpty(email) 
-                    && Regex.IsMatch(email, @"^(.+)\@(.+)$") 
-                    && email.Length <= Account.MAX_EMAIL_LENGTH)
-                .WithMessage("Invalid email");
-
             RuleFor(x => x.Document)
                 .Must(ValidateDocument)
                 .WithMessage("Invalid document");

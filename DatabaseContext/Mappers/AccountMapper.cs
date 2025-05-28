@@ -11,7 +11,7 @@ namespace DatabaseContext.Mappers
             {
                 AccountId = account.AccountId,
                 Name = account.GetName(),
-                Email = account.Email,
+                Email = account.GetEmail(),
                 Document = account.Document,
                 Password = account.Password,
                 Assets = account.Assets.Select(a => AssetMapper.ToModel(a)).ToList(),

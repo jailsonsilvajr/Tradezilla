@@ -22,7 +22,7 @@ namespace Application.UseCases
                 : new AccountDto
                 {
                     Name = account.GetName(),
-                    Email = account.Email,
+                    Email = account.GetEmail(),
                     Document = account.Document,
                     Assets = account.Assets.Select(d => new AssetDto
                     {
