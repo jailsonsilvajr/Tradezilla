@@ -21,7 +21,7 @@ namespace Domain.Entities
         public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
         public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
-        public Account(Guid accountId, string name, string? email, string? document, string? password, List<Asset> assets, List<Order> orders)
+        public Account(Guid accountId, string? name, string? email, string? document, string? password, List<Asset> assets, List<Order> orders)
         {
             AccountId = accountId;
             _name = new Name(name);
@@ -45,7 +45,7 @@ namespace Domain.Entities
         public string GetName() => _name.GetValue();
         public string GetEmail() => _email.GetValue();
 
-        public static Account Create(string name, string? email, string? document, string? password)
+        public static Account Create(string? name, string? email, string? document, string? password)
         {
             var newAccount = new Account(Guid.NewGuid(), name, email, document, password, [], []);
             Validate(newAccount);

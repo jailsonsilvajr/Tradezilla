@@ -6,9 +6,9 @@ namespace Domain.ValueObjects
     public class Name
     {
         private static readonly NameValidator _validator = new NameValidator();
-        private string _value;
+        private string? _value;
 
-        public Name(string name)
+        public Name(string? name)
         {
             _value = name;
 
@@ -19,6 +19,6 @@ namespace Domain.ValueObjects
             }
         }
 
-        public string GetValue() => _value;
+        public string GetValue() => _value!;
     }
 }
