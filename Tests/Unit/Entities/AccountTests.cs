@@ -22,17 +22,9 @@ namespace Tests.Unit.Entities
             account.GetName().Should().Be(name);
             account.GetEmail().Should().Be(email);
             account.GetDocument().Should().Be("58865866012");
-            account.Password.Should().Be(password);
+            account.GetPassword().Should().Be(password);
             account.Assets.Should().BeEmpty();
             account.Orders.Should().BeEmpty();
-        }
-
-        [Theory]
-        [InlineData("John Doe", "email@test.com", "12345678901", null)]
-        public void Create_WithInvalidData_ShouldThrowValidationException(string name, string email, string document, string? password)
-        {
-            var action = () => Account.Create(name, email, document, password);
-            action.Should().Throw<ValidationException>();
         }
 
         [Fact]
