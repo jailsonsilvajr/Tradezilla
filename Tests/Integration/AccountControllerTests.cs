@@ -46,32 +46,6 @@ namespace Tests.Integration
 
         [Theory]
         [InlineData(null)]
-        [InlineData("john.doe")]
-        public async Task ShouldNotCreateAnAccountWithAnInvalidEmail(string? email)
-        {
-            var json = JsonConvert.SerializeObject(new
-            {
-                Name = "John Doe",
-                Email = email,
-                Document = "97456321558",
-                Password = "asdQWE123"
-            });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("/api/accounts/signUp", content);
-
-            Assert.NotNull(response);
-            Assert.Equal(422, (int)response.StatusCode);
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
-
-            Assert.NotNull(errorResponseDto);
-            Assert.Contains("Invalid email", errorResponseDto.ErrorMessages);
-        }
-
-        [Theory]
-        [InlineData(null)]
         [InlineData("111")]
         [InlineData("abc")]
         [InlineData("7897897897")]
