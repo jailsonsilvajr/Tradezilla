@@ -19,6 +19,6 @@ namespace Domain.ValueObjects
             }
         }
 
-        public string GetValue() => _value ?? throw new ArgumentNullException("Invalid email");
+        public string GetValue() => _value!;
     }
 }
