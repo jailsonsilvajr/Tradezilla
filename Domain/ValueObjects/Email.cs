@@ -6,9 +6,9 @@ namespace Domain.ValueObjects
     public class Email
     {
         private readonly EmailValidator _validator = new EmailValidator();
-        private readonly string _value;
+        private readonly string? _value;
 
-        public Email(string email)
+        public Email(string? email)
         {
             _value = email;
 
@@ -19,6 +19,6 @@ namespace Domain.ValueObjects
             }
         }
 
-        public string GetValue() => _value;
+        public string GetValue() => _value ?? throw new ArgumentNullException("Invalid email");
     }
 }

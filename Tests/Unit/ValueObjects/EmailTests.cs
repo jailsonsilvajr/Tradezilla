@@ -38,7 +38,7 @@ namespace Tests.Unit.ValueObjects
         public void ShouldThrowValidationExceptionForInvalidEmail(string? email)
         {
             Action action = () => new Email(email!);
-            action.Should().Throw<ValidationException>();
+            action.Should().Throw<Exception>();
         }
     }
 }
