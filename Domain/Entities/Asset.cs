@@ -1,6 +1,7 @@
 ﻿using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Validators;
+using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
@@ -10,7 +11,8 @@ namespace Domain.Entities
         private static readonly AssetValidator _validator = new AssetValidator();
         private readonly List<Transaction> _transactions = [];
 
-        public Guid AssetId { get; set; }
+        private readonly ID _assetId;
+
         public Guid AccountId { get; set; }
         public string? AssetName { get; set; }
         public decimal Balance { get; private set; }
@@ -19,7 +21,7 @@ namespace Domain.Entities
 
         public Asset(Guid assetId, Guid accountId, string? assetName, List<Transaction> transactions)
         {
-            AssetId = assetId;
+            _assetId = new ID(assetId);
             AccountId = accountId;
             AssetName = assetName;
             Balance = 0;
@@ -31,6 +33,8 @@ namespace Domain.Entities
 
             Validate(this);
         }
+
+        public Guid GetId() => _assetId.GetValue();
 
         public static Asset Create(Guid accountId, string? assetName)
         {

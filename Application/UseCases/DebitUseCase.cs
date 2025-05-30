@@ -24,7 +24,7 @@ namespace Application.UseCases
             var asset = account.Assets.FirstOrDefault(a => a.AssetName == transactionDto.AssetName) ?? throw new EntityNotFoundException($"Asset {transactionDto.AssetName} not found"); ;
 
             var transaction = Transaction.Create(
-                asset.AssetId,
+                asset.GetId(),
                 transactionDto.Quantity,
                 (TransactionType)transactionDto.TransactionType);
 

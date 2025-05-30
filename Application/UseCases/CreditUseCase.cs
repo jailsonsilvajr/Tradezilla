@@ -28,7 +28,7 @@ namespace Application.UseCases
 
 
             var transaction = Transaction.Create(
-                asset.AssetId,
+                asset.GetId(),
                 transactionDto.Quantity,
                 (TransactionType)transactionDto.TransactionType);
 

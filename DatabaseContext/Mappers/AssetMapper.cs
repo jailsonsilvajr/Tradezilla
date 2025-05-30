@@ -9,7 +9,7 @@ namespace DatabaseContext.Mappers
         {
             return new AssetModel
             {
-                AssetId = asset.AssetId,
+                AssetId = asset.GetId(),
                 AccountId = asset.AccountId,
                 AssetName = asset.AssetName,
                 Balance = asset.Balance,
