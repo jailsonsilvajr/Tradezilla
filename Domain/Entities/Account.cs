@@ -6,28 +6,25 @@ namespace Domain.Entities
 {
     public class Account
     {
-        public static readonly int MAX_DOCUMENT_LENGTH = 11;
-        public static readonly int MAX_PASSWORD_LENGTH = 14;
         private static readonly AccountValidator _validator = new AccountValidator();
         private readonly List<Asset> _assets = [];
         private readonly List<Order> _orders = [];
 
+        private readonly ID _id;
         private readonly Name _name;
         private readonly Email _email;
-
-        public Guid AccountId { get; }
-        public string? Document { get; }
-        public string? Password { get; }
+        private readonly Document _document;
+        private readonly Password _password;
         public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
         public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
-        public Account(Guid accountId, string name, string email, string? document, string? password, List<Asset> assets, List<Order> orders)
+        public Account(Guid accountId, string? name, string? email, string document, string password, List<Asset> assets, List<Order> orders)
         {
-            AccountId = accountId;
+            _id = new ID(accountId);
             _name = new Name(name);
             _email = new Email(email);
-            Document = CleanDocument(document);
-            Password = password;
+            _document = new Document(document);
+            _password = new Password(password);
 
             foreach (var asset in assets)
             {
@@ -42,10 +39,13 @@ namespace Domain.Entities
             Validate(this);
         }
 
+        public Guid GetId() => _id.GetValue();
         public string GetName() => _name.GetValue();
         public string GetEmail() => _email.GetValue();
+        public string GetDocument() => _document.GetValue();
+        public string GetPassword() => _password.GetValue();
 
-        public static Account Create(string name, string email, string? document, string? password)
+        public static Account Create(string? name, string? email, string document, string password)
         {
             var newAccount = new Account(Guid.NewGuid(), name, email, document, password, [], []);
             Validate(newAccount);
@@ -59,13 +59,6 @@ namespace Domain.Entities
             {
                 throw new ValidationException("Invalid data to create account", validationResult.Errors);
             }
-        }
-
-        public static string? CleanDocument(string? document)
-        {
-            return document is null 
-                ? default 
-                : document.Trim().Replace(".", "").Replace("-", "");
         }
 
         public void AddAsset(Asset asset)

@@ -9,11 +9,11 @@ namespace DatabaseContext.Mappers
         {
             return new AccountModel
             {
-                AccountId = account.AccountId,
+                AccountId = account.GetId(),
                 Name = account.GetName(),
                 Email = account.GetEmail(),
-                Document = account.Document,
-                Password = account.Password,
+                Document = account.GetDocument(),
+                Password = account.GetPassword(),
                 Assets = account.Assets.Select(a => AssetMapper.ToModel(a)).ToList(),
                 Orders = account.Orders.Select(o => OrderMapper.ToModel(o)).ToList()
             };
