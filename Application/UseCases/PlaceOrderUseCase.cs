@@ -33,7 +33,7 @@ namespace Application.UseCases
             }
 
             var order = Order.Create(
-                account.AccountId,
+                account.GetId(),
                 placeOrderDto.MarketId,
                 placeOrderDto.Side,
                 placeOrderDto.Quantity,

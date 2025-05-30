@@ -55,15 +55,15 @@ namespace DatabaseContext.Repositories
             AccountModel? accountModel;
             var trackedAccountModel = _context.ChangeTracker
                 .Entries<AccountModel>()
-                .FirstOrDefault(e => e.Entity.AccountId == account.AccountId);
+                .FirstOrDefault(e => e.Entity.AccountId == account.GetId());
 
             accountModel = trackedAccountModel is null
-                ? await GetAccountModelByAccountIdAsync(account.AccountId)
+                ? await GetAccountModelByAccountIdAsync(account.GetId())
                 : trackedAccountModel.Entity;
 
             if (accountModel is null)
             {
-                throw new EntityNotFoundException($"Account with ID {account.AccountId} not found.");
+                throw new EntityNotFoundException($"Account with ID {account.GetId()} not found.");
             }
 
             var newOrdersModel = account.Orders

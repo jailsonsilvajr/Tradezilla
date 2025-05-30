@@ -27,7 +27,7 @@ namespace Application.UseCases
             _accountRepository.RegisterAccount(account);
             await _unitOfWork.SaveChangesAsync();
 
-            return account.AccountId;
+            return account.GetId();
         }
     }
 }

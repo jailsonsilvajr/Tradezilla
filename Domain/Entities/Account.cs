@@ -10,18 +10,17 @@ namespace Domain.Entities
         private readonly List<Asset> _assets = [];
         private readonly List<Order> _orders = [];
 
+        private readonly ID _id;
         private readonly Name _name;
         private readonly Email _email;
         private readonly Document _document;
         private readonly Password _password;
-
-        public Guid AccountId { get; }
         public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
         public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
 
         public Account(Guid accountId, string? name, string? email, string document, string password, List<Asset> assets, List<Order> orders)
         {
-            AccountId = accountId;
+            _id = new ID(accountId);
             _name = new Name(name);
             _email = new Email(email);
             _document = new Document(document);
@@ -40,6 +39,7 @@ namespace Domain.Entities
             Validate(this);
         }
 
+        public Guid GetId() => _id.GetValue();
         public string GetName() => _name.GetValue();
         public string GetEmail() => _email.GetValue();
         public string GetDocument() => _document.GetValue();

@@ -64,7 +64,7 @@ namespace Tests.Unit.UseCase
                     document: "58865866012",
                     password: "asdQWE123");
 
-            var asset = Asset.Create(account.AccountId, "USD");
+            var asset = Asset.Create(account.GetId(), "USD");
             var transaction = Transaction.Create(asset.AssetId, placeOrderDto.Price, TransactionType.Credit);
             asset.AddTransaction(transaction);
             account.AddAsset(asset);

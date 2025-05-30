@@ -9,7 +9,7 @@ namespace DatabaseContext.Mappers
         {
             return new AccountModel
             {
-                AccountId = account.AccountId,
+                AccountId = account.GetId(),
                 Name = account.GetName(),
                 Email = account.GetEmail(),
                 Document = account.GetDocument(),
