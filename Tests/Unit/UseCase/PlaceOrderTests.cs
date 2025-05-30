@@ -65,7 +65,7 @@ namespace Tests.Unit.UseCase
                     password: "asdQWE123");
 
             var asset = Asset.Create(account.GetId(), "USD");
-            var transaction = Transaction.Create(asset.AssetId, placeOrderDto.Price, TransactionType.Credit);
+            var transaction = Transaction.Create(asset.GetId(), placeOrderDto.Price, TransactionType.Credit);
             asset.AddTransaction(transaction);
             account.AddAsset(asset);
             _accountRepositoryMock.Setup(repo => repo.GetAccountByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(account);

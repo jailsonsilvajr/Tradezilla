@@ -60,7 +60,7 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit = Transaction.Create(asset.AssetId, 1.5m, TransactionType.Credit);
+            var deposit = Transaction.Create(asset.GetId(), 1.5m, TransactionType.Credit);
 
             // Act
             asset.AddTransaction(deposit);
@@ -77,8 +77,8 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit1 = Transaction.Create(asset.AssetId, 1.5m, TransactionType.Credit);
-            var deposit2 = Transaction.Create(asset.AssetId, 2.5m, TransactionType.Credit);
+            var deposit1 = Transaction.Create(asset.GetId(), 1.5m, TransactionType.Credit);
+            var deposit2 = Transaction.Create(asset.GetId(), 2.5m, TransactionType.Credit);
 
             // Act
             asset.AddTransaction(deposit1);

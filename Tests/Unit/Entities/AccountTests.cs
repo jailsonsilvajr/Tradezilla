@@ -53,7 +53,7 @@ namespace Tests.Unit.Entities
                 "asdQWE123");
 
             var asset = Asset.Create(account.GetId(), "USD");
-            var transaction = Transaction.Create(asset.AssetId, 1000, TransactionType.Credit);
+            var transaction = Transaction.Create(asset.GetId(), 1000, TransactionType.Credit);
             asset.AddTransaction(transaction);
             account.AddAsset(asset);
 
@@ -80,7 +80,7 @@ namespace Tests.Unit.Entities
                 password: "asdQWE123");
 
             var asset = Asset.Create(account.GetId(), "USD");
-            var transaction = Transaction.Create(asset.AssetId, 10, TransactionType.Credit);
+            var transaction = Transaction.Create(asset.GetId(), 10, TransactionType.Credit);
             asset.AddTransaction(transaction);
             account.AddAsset(asset);
 
