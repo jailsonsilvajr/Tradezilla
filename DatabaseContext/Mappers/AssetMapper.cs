@@ -10,9 +10,9 @@ namespace DatabaseContext.Mappers
             return new AssetModel
             {
                 AssetId = asset.GetId(),
-                AccountId = asset.AccountId,
-                AssetName = asset.AssetName,
-                Balance = asset.Balance,
+                AccountId = asset.GetAccountId(),
+                AssetName = asset.GetAssetName(),
+                Balance = asset.GetBalance(),
                 Transactions = asset.Transactions.Select(d => TransactionMapper.ToModel(d)).ToList()
             };
         }

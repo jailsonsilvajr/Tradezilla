@@ -1,12 +1,10 @@
 ﻿using Domain.Exceptions;
-using Domain.Validators;
 using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
     public class Account
     {
-        private static readonly AccountValidator _validator = new AccountValidator();
         private readonly List<Asset> _assets = [];
         private readonly List<Order> _orders = [];
 
@@ -35,8 +33,6 @@ namespace Domain.Entities
             {
                 AddOrder(order);
             }
-
-            Validate(this);
         }
 
         public Guid GetId() => _id.GetValue();
@@ -48,17 +44,7 @@ namespace Domain.Entities
         public static Account Create(string? name, string? email, string document, string password)
         {
             var newAccount = new Account(Guid.NewGuid(), name, email, document, password, [], []);
-            Validate(newAccount);
             return newAccount;
-        }
-
-        private static void Validate(Account account)
-        {
-            var validationResult = _validator.Validate(account);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException("Invalid data to create account", validationResult.Errors);
-            }
         }
 
         public void AddAsset(Asset asset)
@@ -73,14 +59,14 @@ namespace Domain.Entities
                 : order.Market?.Split("/")[1].ToUpper();
 
             var asset = Assets
-                .FirstOrDefault(asset => asset.AssetName?.ToUpper() == assetName);
+                .FirstOrDefault(asset => asset.GetAssetName()?.ToUpper() == assetName);
 
             if (asset is null)
             {
                 throw new EntityNotFoundException($"Asset {assetName} not found");
             }
 
-            if (asset.Balance < order.Quantity)
+            if (asset.GetBalance() < order.Quantity)
             {
                 throw new InsufficientBalanceException($"Insufficient balance for asset {assetName}");
             }

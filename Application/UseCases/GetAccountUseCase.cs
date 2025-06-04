@@ -26,8 +26,8 @@ namespace Application.UseCases
                     Document = account.GetDocument(),
                     Assets = account.Assets.Select(d => new AssetDto
                     {
-                        AssetName = d.AssetName,
-                        Balance = d.Balance
+                        AssetName = d.GetAssetName(),
+                        Balance = d.GetBalance()
                     }).ToList()
                 };
         }

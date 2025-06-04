@@ -23,7 +23,7 @@ namespace Application.UseCases
         public async Task PlaceCreditAsync(TransactionDto transactionDto)
         {
             var account = await _accountRepository.GetAccountByAccountIdAsync(transactionDto.AccountId) ?? throw new EntityNotFoundException($"Account {transactionDto.AccountId} not found");
-            var asset = account.Assets.FirstOrDefault(a => a.AssetName == transactionDto.AssetName);
+            var asset = account.Assets.FirstOrDefault(a => a.GetAssetName() == transactionDto.AssetName);
             asset ??= Asset.Create(transactionDto.AccountId, transactionDto.AssetName);
 
 
