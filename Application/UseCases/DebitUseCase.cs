@@ -21,7 +21,7 @@ namespace Application.UseCases
         public async Task PlaceDebitAsync(TransactionDto transactionDto)
         {
             var account = await _accountRepository.GetAccountByAccountIdAsync(transactionDto.AccountId) ?? throw new EntityNotFoundException($"Account {transactionDto.AccountId} not found");
-            var asset = account.Assets.FirstOrDefault(a => a.AssetName == transactionDto.AssetName) ?? throw new EntityNotFoundException($"Asset {transactionDto.AssetName} not found"); ;
+            var asset = account.Assets.FirstOrDefault(a => a.GetAssetName() == transactionDto.AssetName) ?? throw new EntityNotFoundException($"Asset {transactionDto.AssetName} not found");
 
             var transaction = Transaction.Create(
                 asset.GetId(),

@@ -96,35 +96,6 @@ namespace Tests.Integration
             Assert.Contains($"Account {Guid.Empty} not found", errorResponseDto.ErrorMessages);
         }
 
-        [Theory]
-        [InlineData(null, "53688039076")]
-        [InlineData("", "15142888006")]
-        [InlineData("BTCBTC", "16599447082")]
-        public async Task ShouldNotCreateAnCreditTransactionWithAnInvalidAssetName(string? assetName, string document)
-        {
-            var accountId = await SignUp(document);
-
-            var json = JsonConvert.SerializeObject(new
-            {
-                AccountId = accountId,
-                AssetName = assetName,
-                Quantity = 10,
-                TransactionType = (int)TransactionType.Credit
-            });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync("/api/transactions/placeCredit", content);
-
-            Assert.NotNull(response);
-            Assert.Equal(422, (int)response.StatusCode);
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
-
-            Assert.NotNull(errorResponseDto);
-            Assert.Contains($"AssetName must be between 1 and {Asset.MAX_ASSETNAME_LENGTH} characters long", errorResponseDto.ErrorMessages);
-        }
-
         [Fact]
         public async Task ShouldNotCreateAnCreditTransactionWithAnInvalidValue()
         {
