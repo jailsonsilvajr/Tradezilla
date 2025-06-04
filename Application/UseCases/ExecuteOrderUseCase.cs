@@ -18,16 +18,14 @@ namespace Application.UseCases
         {
             var orders = await _orderRepository.GetOrdersOpensByMarketIdAsync(marketId);
 
-            var highestBuy = orders?.Where(x => x.Side!.ToUpper() == "BUY").OrderByDescending(o => o.Price).FirstOrDefault();
-            var lowestSell = orders?.Where(x => x.Side!.ToUpper() == "SELL").OrderByDescending(o => o.Price).FirstOrDefault();
+            var highestBuy = orders?.Where(x => x.GetSide().ToUpper() == "BUY").OrderByDescending(o => o.Price).FirstOrDefault();
+            var lowestSell = orders?.Where(x => x.GetSide().ToUpper() == "SELL").OrderByDescending(o => o.Price).FirstOrDefault();
             if (highestBuy is null || lowestSell is null || highestBuy.Price < lowestSell.Price)
             {
                 return;
             }
 
             var fillQuantity = Math.Min(highestBuy.Quantity, lowestSell.Quantity);
-            var fillPrice = highestBuy.CreatedAt > lowestSell.CreatedAt ? lowestSell.Price : highestBuy.Price;
-            var tradeSide = highestBuy.CreatedAt > lowestSell.CreatedAt ? "BUY" : "SELL";
 
             highestBuy.SetFillQuantity(fillQuantity);
             lowestSell.SetFillQuantity(fillQuantity);

@@ -9,10 +9,10 @@ namespace DatabaseContext.Mappers
         {
             return new OrderModel
             {
-                OrderId = order.OrderId,
-                AccountId = order.AccountId,
-                Market = order.Market,
-                Side = order.Side,
+                OrderId = order.GetOrderId(),
+                AccountId = order.GetAccountId(),
+                Market = order.GetMarket(),
+                Side = order.GetSide(),
                 Quantity = order.Quantity,
                 Price = order.Price,
                 FillQuantity = order.FillQuantity,

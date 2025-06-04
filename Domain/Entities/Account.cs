@@ -54,9 +54,9 @@ namespace Domain.Entities
 
         public void AddOrder(Order order)
         {
-            var assetName = order.Side?.ToUpper() != "BUY"
-                ? order.Market?.Split("/")[0].ToUpper()
-                : order.Market?.Split("/")[1].ToUpper();
+            var assetName = order.GetSide()?.ToUpper() != "BUY"
+                ? order.GetMarket()?.Split("/")[0].ToUpper()
+                : order.GetMarket()?.Split("/")[1].ToUpper();
 
             var asset = Assets
                 .FirstOrDefault(asset => asset.GetAssetName()?.ToUpper() == assetName);

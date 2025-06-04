@@ -46,7 +46,7 @@ namespace Application.UseCases
 
             await _mediator.Send(new PlaceOrderNotification(order));
 
-            return order.OrderId;
+            return order.GetOrderId();
         }
     }
 }

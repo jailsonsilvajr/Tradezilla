@@ -67,7 +67,7 @@ namespace DatabaseContext.Repositories
             }
 
             var newOrdersModel = account.Orders
-                .Where(order => !accountModel.Orders.Any(orderModel => orderModel.OrderId == order.OrderId))
+                .Where(order => !accountModel.Orders.Any(orderModel => orderModel.OrderId == order.GetOrderId()))
                 .Select(order => OrderMapper.ToModel(order))
                 .ToList();
 

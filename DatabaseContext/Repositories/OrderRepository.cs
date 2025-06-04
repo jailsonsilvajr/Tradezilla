@@ -36,7 +36,7 @@ namespace DatabaseContext.Repositories
         public void UpdateOrderExecuted(Order order)
         {
             var trackedEntity = _context.ChangeTracker.Entries<OrderModel>()
-                .FirstOrDefault(e => e.Entity.OrderId == order.OrderId);
+                .FirstOrDefault(e => e.Entity.OrderId == order.GetOrderId());
 
             if (trackedEntity is not null)
             {
