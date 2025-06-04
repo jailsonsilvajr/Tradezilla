@@ -15,7 +15,7 @@ namespace Application.Handlers
 
         public async Task Handle(PlaceOrderNotification request)
         {
-            await _executeOrder.ExecuteOrderAsync(request.Order.Market!);
+            await _executeOrder.ExecuteOrderAsync(request.Order.GetMarket());
         }
     }
 }

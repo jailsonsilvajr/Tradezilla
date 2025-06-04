@@ -1,18 +1,20 @@
 ﻿using Domain.Exceptions;
 using Domain.Validators;
+using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
     public class Order
     {
-        public static readonly int MAX_MARKET_LENGTH = 7;
         public static readonly int MAX_SIDE_LENGTH = 5;
         public static readonly int MAX_STATUS_LENGTH = 10;
         private static readonly OrderValidator _validator = new OrderValidator();
-        public Guid OrderId { get; }
-        public Guid AccountId { get; set; }
-        public string? Market { get; }
-        public string? Side { get; }
+
+        private readonly ID _orderId;
+        private readonly ID _accountId;
+        private readonly Market _market;
+        private readonly Side _side;
+
         public int Quantity { get; }
         public decimal Price { get; }
         public int FillQuantity { get; private set; }
@@ -22,14 +24,14 @@ namespace Domain.Entities
         public Account? Account { get; set; }
 
         public Order(
-            Guid orderId, Guid accountId, string? market, 
-            string? side, int quantity, decimal price, 
+            Guid orderId, Guid accountId, string market, 
+            string side, int quantity, decimal price, 
             DateTime createdAt, string? status)
         {
-            OrderId = orderId;
-            AccountId = accountId;
-            Market = market;
-            Side = side;
+            _orderId = new ID(orderId);
+            _accountId = new ID(accountId);
+            _market = new Market(market);
+            _side = new Side(side);
             Quantity = quantity;
             Price = price;
             CreatedAt = createdAt;
@@ -38,8 +40,13 @@ namespace Domain.Entities
             Validate(this);
         }
 
+        public Guid GetOrderId() => _orderId.GetValue();
+        public Guid GetAccountId() => _accountId.GetValue();
+        public string GetMarket() => _market.GetValue();
+        public string GetSide() => _side.GetValue();
+
         public static Order Create(
-            Guid accountId, string? market, string? side,
+            Guid accountId, string market, string side,
             int quantity, decimal price)
         {
             var newOrder = new Order(
@@ -76,7 +83,7 @@ namespace Domain.Entities
                     price -= price % (decimal)Math.Pow(10, precision);
                 }
 
-                if (order.Side?.ToUpper() == "BUY")
+                if (order.GetSide().ToUpper() == "BUY")
                 {
                     if (!index.buy.ContainsKey(price.ToString()))
                     {
@@ -86,7 +93,7 @@ namespace Domain.Entities
                     index.buy[price.ToString()] += order.Quantity;
                 }
 
-                if (order.Side?.ToUpper() == "SELL")
+                if (order.GetSide().ToUpper() == "SELL")
                 {
                     if (!index.sell.ContainsKey(price.ToString()))
                     {

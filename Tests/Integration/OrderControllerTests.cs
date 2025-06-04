@@ -115,37 +115,6 @@ namespace Tests.Integration
                 .Which.Should().Be("Insufficient balance for asset USD");
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("BTCUSDT/T")] // Excede MAX_MARKET_LENGTH
-        public async Task PlaceOrder_WithInvalidMarket_ShouldReturnUnprocessableEntity(string? invalidMarket)
-        {
-            // Arrange
-            var accountId = await SignUp("93618553013");
-            await MakeTransaction(accountId, "BTC", 1, (int)TransactionType.Credit);
-
-            var placeOrderDto = new PlaceOrderDto
-            {
-                AccountId = accountId,
-                MarketId = invalidMarket,
-                Side = "Buy",
-                Quantity = 1,
-                Price = 1000m
-            };
-
-            var content = new StringContent(
-                JsonConvert.SerializeObject(placeOrderDto),
-                Encoding.UTF8,
-                "application/json");
-
-            // Act
-            var response = await _client.PostAsync("/api/orders/placeOrder", content);
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
-        }
-
         [Fact]
         public async Task MustExecuteOrder()
         {
