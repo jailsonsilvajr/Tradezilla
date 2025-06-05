@@ -42,7 +42,7 @@ namespace Domain.Entities
 
         public void AddTransaction(Transaction transaction)
         {
-            if (transaction.TransactionType == TransactionType.Credit)
+            if (transaction.GetTransactionType() == TransactionType.Credit)
             {
                 AddCreditTransaction(transaction);
             }
@@ -55,18 +55,18 @@ namespace Domain.Entities
         private void AddCreditTransaction(Transaction transaction)
         {
             _transactions.Add(transaction);
-            _balance = new Balance(_balance.GetValue() + transaction.Quantity);
+            _balance = new Balance(_balance.GetValue() + transaction.GetQuantity());
         }
 
         private void AddDebitTransaction(Transaction transaction)
         {
-            if (GetBalance() < transaction.Quantity)
+            if (GetBalance() < transaction.GetQuantity())
             {
                 throw new InsufficientBalanceException($"Insufficient balance to perform transaction");
             }
             
             _transactions.Add(transaction);
-            _balance = new Balance(_balance.GetValue() - transaction.Quantity);
+            _balance = new Balance(_balance.GetValue() - transaction.GetQuantity());
         }
     }
 }

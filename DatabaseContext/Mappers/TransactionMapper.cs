@@ -10,10 +10,10 @@ namespace DatabaseContext.Mappers
         {
             return new TransactionModel
             {
-                TransactionId = transaction.TransactionId,
-                AssetId = transaction.AssetId,
-                Quantity = transaction.Quantity,
-                TransactionType = (int)transaction.TransactionType
+                TransactionId = transaction.GetTransactionId(),
+                AssetId = transaction.GetAssetId(),
+                Quantity = transaction.GetQuantity(),
+                TransactionType = (int)transaction.GetTransactionType()
             };
         }
 
