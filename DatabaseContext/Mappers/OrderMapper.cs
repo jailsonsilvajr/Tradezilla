@@ -13,12 +13,12 @@ namespace DatabaseContext.Mappers
                 AccountId = order.GetAccountId(),
                 Market = order.GetMarket(),
                 Side = order.GetSide(),
-                Quantity = order.Quantity,
-                Price = order.Price,
+                Quantity = order.GetQuantity(),
+                Price = order.GetPrice(),
                 FillQuantity = order.FillQuantity,
                 FillPrice = order.FillPrice,
-                CreatedAt = order.CreatedAt,
-                Status = order.Status
+                CreatedAt = order.GetCreatedDate(),
+                Status = order.GetStatus()
             };
         }
 

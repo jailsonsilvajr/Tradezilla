@@ -66,7 +66,7 @@ namespace Domain.Entities
                 throw new EntityNotFoundException($"Asset {assetName} not found");
             }
 
-            if (asset.GetBalance() < order.Quantity)
+            if (asset.GetBalance() < order.GetQuantity())
             {
                 throw new InsufficientBalanceException($"Insufficient balance for asset {assetName}");
             }

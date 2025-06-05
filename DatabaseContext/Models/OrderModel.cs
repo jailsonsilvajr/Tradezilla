@@ -11,7 +11,7 @@
         public int FillQuantity { get; set; }
         public decimal FillPrice { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         public AccountModel? Account { get; set; }
     }
 }

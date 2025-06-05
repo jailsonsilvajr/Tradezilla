@@ -6,44 +6,42 @@ namespace Domain.Entities
 {
     public class Order
     {
-        public static readonly int MAX_SIDE_LENGTH = 5;
-        public static readonly int MAX_STATUS_LENGTH = 10;
-        private static readonly OrderValidator _validator = new OrderValidator();
-
         private readonly ID _orderId;
         private readonly ID _accountId;
         private readonly Market _market;
         private readonly Side _side;
+        private readonly Quantity _quantity;
+        private readonly Price _price;
+        private readonly Date _createdDate;
+        private Status _status;
 
-        public int Quantity { get; }
-        public decimal Price { get; }
         public int FillQuantity { get; private set; }
         public decimal FillPrice { get; private set; }
-        public DateTime CreatedAt { get; }
-        public string? Status { get; set; }
         public Account? Account { get; set; }
 
         public Order(
             Guid orderId, Guid accountId, string market, 
             string side, int quantity, decimal price, 
-            DateTime createdAt, string? status)
+            DateTime createdTime, string status)
         {
             _orderId = new ID(orderId);
             _accountId = new ID(accountId);
             _market = new Market(market);
             _side = new Side(side);
-            Quantity = quantity;
-            Price = price;
-            CreatedAt = createdAt;
-            Status = status;
-
-            Validate(this);
+            _quantity = new Quantity(quantity);
+            _price = new Price(price);
+            _createdDate = new Date(createdTime);
+            _status = new Status(status);
         }
 
         public Guid GetOrderId() => _orderId.GetValue();
         public Guid GetAccountId() => _accountId.GetValue();
         public string GetMarket() => _market.GetValue();
         public string GetSide() => _side.GetValue();
+        public int GetQuantity() => _quantity.GetValue();
+        public decimal GetPrice() => _price.GetValue();
+        public DateTime GetCreatedDate() => _createdDate.GetValue();
+        public string GetStatus() => _status.GetValue();
 
         public static Order Create(
             Guid accountId, string market, string side,
@@ -59,17 +57,7 @@ namespace Domain.Entities
                 DateTime.UtcNow,
                 "open");
 
-            Validate(newOrder);
             return newOrder;
-        }
-
-        private static void Validate(Order order)
-        {
-            var validationResult = _validator.Validate(order);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException("Invalid data to create order", validationResult.Errors);
-            }
         }
 
         public static (Dictionary<string, int> buy, Dictionary<string, int> sell) GroupOrdersByPrecision(List<Order>? orders, int precision)
@@ -77,7 +65,7 @@ namespace Domain.Entities
             (Dictionary<string, int> buy, Dictionary<string, int> sell) index = new(new Dictionary<string, int>(), new Dictionary<string, int>());
             foreach (var order in orders ?? new())
             {
-                var price = order.Price;
+                var price = order.GetPrice();
                 if (precision > 0)
                 {
                     price -= price % (decimal)Math.Pow(10, precision);
@@ -90,7 +78,7 @@ namespace Domain.Entities
                         index.buy[price.ToString()] = 0;
                     }
 
-                    index.buy[price.ToString()] += order.Quantity;
+                    index.buy[price.ToString()] += order.GetQuantity();
                 }
 
                 if (order.GetSide().ToUpper() == "SELL")
@@ -100,7 +88,7 @@ namespace Domain.Entities
                         index.sell[price.ToString()] = 0;
                     }
 
-                    index.sell[price.ToString()] += order.Quantity;
+                    index.sell[price.ToString()] += order.GetQuantity();
                 }
             }
 
@@ -116,9 +104,9 @@ namespace Domain.Entities
 
             FillQuantity = quantity;
 
-            if (FillQuantity == Quantity)
+            if (FillQuantity == GetQuantity())
             {
-                Status = "closed";
+                _status = new Status("closed");
             }
         }
 

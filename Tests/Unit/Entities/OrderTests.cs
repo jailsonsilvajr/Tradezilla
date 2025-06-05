@@ -1,6 +1,4 @@
-﻿using Application.DTOs;
-using Domain.Entities;
-using Domain.Exceptions;
+﻿using Domain.Entities;
 using FluentAssertions;
 
 namespace Tests.Unit.Entities
@@ -23,31 +21,12 @@ namespace Tests.Unit.Entities
             order.GetAccountId().Should().Be(accountId);
             order.GetMarket().Should().Be(market);
             order.GetSide().Should().Be(side);
-            order.Quantity.Should().Be(quantity);
-            order.Price.Should().Be(price);
-            order.Status.Should().Be("open");
-            order.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+            order.GetQuantity().Should().Be(quantity);
+            order.GetPrice().Should().Be(price);
+            order.GetStatus().Should().Be("open");
+            order.GetCreatedDate().Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
             order.FillQuantity.Should().Be(0);
             order.FillPrice.Should().Be(0);
-        }
-
-        [Theory]
-        [InlineData("BTC/USD", "buy", 0, 1000)] // Quantidade zero
-        [InlineData("BTC/USD", "buy", -1, 1000)] // Quantidade negativa
-        [InlineData("BTC/USD", "buy", 1, 0)] // Preço zero
-        [InlineData("BTC/USD", "buy", 1, -1)] // Preço negativo
-        public void Create_WithInvalidData_ShouldThrowValidationException(
-            string market, 
-            string side,
-            int quantity, 
-            decimal price)
-        {
-            var accountId = Guid.NewGuid();
-
-            var action = () => Order.Create(accountId, market, side, quantity, price);
-
-            action.Should().Throw<ValidationException>()
-                .WithMessage("Invalid data to create order");
         }
 
         [Theory]
@@ -92,7 +71,7 @@ namespace Tests.Unit.Entities
 
             var order = Order.Create(accountId, market, side, quantity, price);
 
-            order.Status.Should().Be("open");
+            order.GetStatus().Should().Be("open");
         }
 
         [Fact]

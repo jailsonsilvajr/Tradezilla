@@ -42,7 +42,7 @@ namespace DatabaseContext.Repositories
             {
                 trackedEntity.Entity.FillQuantity = order.FillQuantity;
                 trackedEntity.Entity.FillPrice = order.FillPrice;
-                trackedEntity.Entity.Status = order.Status;
+                trackedEntity.Entity.Status = order.GetStatus();
 
                 _context.Orders.Update(trackedEntity.Entity);
             }
