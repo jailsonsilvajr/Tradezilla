@@ -119,7 +119,7 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains("Value cannot be 0", errorResponseDto.ErrorMessages);
+            Assert.Contains("Quantity must be greater than 0", errorResponseDto.ErrorMessages);
         }
     }
 }

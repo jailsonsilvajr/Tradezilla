@@ -4,7 +4,7 @@
     {
         public Guid TransactionId { get; set; }
         public Guid AssetId { get; set; }
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
         public AssetModel? Asset { get; set; }
         public int TransactionType { get; set; }
     }

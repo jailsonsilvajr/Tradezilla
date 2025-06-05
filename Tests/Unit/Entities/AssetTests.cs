@@ -30,7 +30,7 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit = Transaction.Create(asset.GetId(), 1.5m, TransactionType.Credit);
+            var deposit = Transaction.Create(asset.GetId(), 5, TransactionType.Credit);
 
             // Act
             asset.AddTransaction(deposit);
@@ -38,7 +38,7 @@ namespace Tests.Unit.Entities
             // Assert
             asset.Transactions.Should().ContainSingle();
             asset.Transactions.First().Should().Be(deposit);
-            asset.GetBalance().Should().Be(1.5m);
+            asset.GetBalance().Should().Be(5);
         }
 
         [Fact]
@@ -47,8 +47,8 @@ namespace Tests.Unit.Entities
             // Arrange
             var accountId = Guid.NewGuid();
             var asset = Asset.Create(accountId, "BTC");
-            var deposit1 = Transaction.Create(asset.GetId(), 1.5m, TransactionType.Credit);
-            var deposit2 = Transaction.Create(asset.GetId(), 2.5m, TransactionType.Credit);
+            var deposit1 = Transaction.Create(asset.GetId(), 5, TransactionType.Credit);
+            var deposit2 = Transaction.Create(asset.GetId(), 2, TransactionType.Credit);
 
             // Act
             asset.AddTransaction(deposit1);
@@ -56,7 +56,7 @@ namespace Tests.Unit.Entities
 
             // Assert
             asset.Transactions.Should().HaveCount(2);
-            asset.GetBalance().Should().Be(4.0m);
+            asset.GetBalance().Should().Be(7);
         }
     }
 } 

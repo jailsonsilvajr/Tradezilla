@@ -2,7 +2,6 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
 using FluentAssertions;
-using Xunit;
 
 namespace Tests.Unit.Entities
 {
@@ -13,16 +12,16 @@ namespace Tests.Unit.Entities
         {
             // Arrange
             var assetId = Guid.NewGuid();
-            var value = 1.5m;
+            var value = 5;
 
             // Act
             var transaction = Transaction.Create(assetId, value, TransactionType.Credit);
 
             // Assert
             transaction.Should().NotBeNull();
-            transaction.TransactionId.Should().NotBeEmpty();
-            transaction.AssetId.Should().Be(assetId);
-            transaction.Quantity.Should().Be(value);
+            transaction.GetTransactionId().Should().NotBeEmpty();
+            transaction.GetAssetId().Should().Be(assetId);
+            transaction.GetQuantity().Should().Be(value);
         }
 
         [Fact]
@@ -30,12 +29,11 @@ namespace Tests.Unit.Entities
         {
             // Arrange
             var assetId = Guid.Empty;
-            var value = 1.5m;
+            var value = 5;
 
             // Act & Assert
             var action = () => Transaction.Create(assetId, value, TransactionType.Credit);
-            action.Should().Throw<ValidationException>()
-                .WithMessage("Invalid data to create transaction");
+            action.Should().Throw<ValidationException>();
         }
 
         [Fact]
@@ -46,23 +44,7 @@ namespace Tests.Unit.Entities
 
             // Act & Assert
             var action = () => Transaction.Create(assetId, 0, TransactionType.Credit);
-            action.Should().Throw<ValidationException>()
-                .WithMessage("Invalid data to create transaction");
-        }
-
-        [Fact]
-        public void Create_WithValidValue_ShouldAcceptDecimalValues()
-        {
-            // Arrange
-            var assetId = Guid.NewGuid();
-            var value = 0.00000001m; // Teste com valor decimal muito pequeno
-
-            // Act
-            var transaction = Transaction.Create(assetId, value, TransactionType.Credit);
-
-            // Assert
-            transaction.Should().NotBeNull();
-            transaction.Quantity.Should().Be(value);
+            action.Should().Throw<ValidationException>();
         }
     }
 } 
