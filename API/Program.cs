@@ -30,6 +30,7 @@ builder.Services.AddScoped<IGetAccount, GetAccountUseCase>();
 builder.Services.AddScoped<IPlaceOrder, PlaceOrderUseCase>();
 builder.Services.AddScoped<IGetDepth, GetDepthUseCase>();
 builder.Services.AddScoped<IExecuteOrder, ExecuteOrderUseCase>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

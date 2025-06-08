@@ -4,24 +4,23 @@ using Application.Ports.Driven;
 using Application.Ports.Driven.Mediator;
 using Application.Ports.Driving;
 using Domain.Entities;
-using Domain.Exceptions;
 
 namespace Application.UseCases
 {
     public class PlaceOrderUseCase : IPlaceOrder
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IWalletRepository _walletRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMediator _mediator;
         private readonly IBook _book;
 
         public PlaceOrderUseCase(
-            IAccountRepository accountRepository,
+            IWalletRepository walletRepository,
             IUnitOfWork unitOfWork,
             IMediator mediator,
             IBook book)
         {
-            _accountRepository = accountRepository;
+            _walletRepository = walletRepository;
             _unitOfWork = unitOfWork;
             _mediator = mediator;
             _book = book;
@@ -29,22 +28,18 @@ namespace Application.UseCases
 
         public async Task<Guid> PlaceOrder(PlaceOrderDto placeOrderDto)
         {
-            var account = await _accountRepository.GetAccountByAccountIdAsync(placeOrderDto.AccountId);
-            if (account == null)
-            {
-                throw new EntityNotFoundException($"AccountId {placeOrderDto.AccountId} not found");
-            }
+            var wallet = await _walletRepository.GetWalletByAccountIdAsync(placeOrderDto.AccountId);
 
             var order = Order.Create(
-                account.GetId(),
+                wallet.GetAccountId(),
                 placeOrderDto.MarketId,
                 placeOrderDto.Side,
                 placeOrderDto.Quantity,
                 placeOrderDto.Price);
 
-            account.AddOrder(order);
+            wallet.AddOrder(order);
 
-            await _accountRepository.RegisterOrdersAsync(account);
+            await _walletRepository.RegisterOrdersAsync(wallet);
             await _unitOfWork.SaveChangesAsync();
 
             _book.AddOrder(order);
