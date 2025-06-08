@@ -13,15 +13,18 @@ namespace Application.UseCases
         private readonly IAccountRepository _accountRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMediator _mediator;
+        private readonly IBook _book;
 
         public PlaceOrderUseCase(
             IAccountRepository accountRepository,
             IUnitOfWork unitOfWork,
-            IMediator mediator)
+            IMediator mediator,
+            IBook book)
         {
             _accountRepository = accountRepository;
             _unitOfWork = unitOfWork;
             _mediator = mediator;
+            _book = book;
         }
 
         public async Task<Guid> PlaceOrder(PlaceOrderDto placeOrderDto)
@@ -44,6 +47,7 @@ namespace Application.UseCases
             await _accountRepository.RegisterOrdersAsync(account);
             await _unitOfWork.SaveChangesAsync();
 
+            _book.AddOrder(order);
             await _mediator.Send(new PlaceOrderNotification(order));
 
             return order.GetOrderId();

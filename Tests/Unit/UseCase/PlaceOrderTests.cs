@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application;
+using Application.DTOs;
 using Application.Ports.Driven;
 using Application.Ports.Driven.Mediator;
 using Application.UseCases;
@@ -25,7 +26,8 @@ namespace Tests.Unit.UseCase
             _placeOrderUseCase = new PlaceOrderUseCase(
                 _accountRepositoryMock.Object,
                 _unitOfWorkMock.Object,
-                _mediatorMock.Object);
+                _mediatorMock.Object,
+                new Book(_mediatorMock.Object));
         }
 
         [Fact]

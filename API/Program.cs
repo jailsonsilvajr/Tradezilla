@@ -1,3 +1,4 @@
+using Application;
 using Application.Handlers;
 using Application.Notifications;
 using Application.Ports.Driven;
@@ -19,8 +20,9 @@ if (!env.IsEnvironment("Testing"))
 }
 
 builder.Services.AddTransient<INotificationHandler<PlaceOrderNotification>, PlaceOrderHandler>();
+builder.Services.AddTransient<INotificationHandler<PlaceTradeNotification>, PlaceTradeHandler>();
 builder.Services.AddSingleton<IMediator, Mediator>();
-
+builder.Services.AddSingleton<IBook, Book>();
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
 builder.Services.AddScoped<ICredit, CreditUseCase>();
 builder.Services.AddScoped<IDebit, DebitUseCase>();
