@@ -1,39 +1,19 @@
-﻿using Application.Ports.Driven;
-using Application.Ports.Driving;
+﻿using Application.Ports.Driving;
 
 namespace Application.UseCases
 {
     public class ExecuteOrderUseCase : IExecuteOrder
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IBook _book;
 
-        public ExecuteOrderUseCase(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+        public ExecuteOrderUseCase(IBook book)
         {
-            _orderRepository = orderRepository;
-            _unitOfWork = unitOfWork;
+            _book = book;
         }
 
         public async Task ExecuteOrderAsync(string marketId)
         {
-            var orders = await _orderRepository.GetOrdersOpensByMarketIdAsync(marketId);
-
-            var highestBuy = orders?.Where(x => x.GetSide().ToUpper() == "BUY").OrderByDescending(o => o.GetPrice()).FirstOrDefault();
-            var lowestSell = orders?.Where(x => x.GetSide().ToUpper() == "SELL").OrderByDescending(o => o.GetPrice()).FirstOrDefault();
-            if (highestBuy is null || lowestSell is null || highestBuy.GetPrice() < lowestSell.GetPrice())
-            {
-                return;
-            }
-
-            var fillQuantity = Math.Min(highestBuy.GetQuantity(), lowestSell.GetQuantity());
-
-            highestBuy.SetFillQuantity(fillQuantity);
-            lowestSell.SetFillQuantity(fillQuantity);
-
-            _orderRepository.UpdateOrderExecuted(highestBuy);
-            _orderRepository.UpdateOrderExecuted(lowestSell);
-
-            await _unitOfWork.SaveChangesAsync();
+            await _book.MatchOrderAsync(marketId);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace Tests.Integration
             response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
             errorResponse.Should().NotBeNull();
             errorResponse!.ErrorMessages.Should().ContainSingle()
-                .Which.Should().Be($"AccountId {placeOrderDto.AccountId} not found");
+                .Which.Should().Be($"Wallet with AccountID {placeOrderDto.AccountId} not found");
         }
 
         [Fact]
