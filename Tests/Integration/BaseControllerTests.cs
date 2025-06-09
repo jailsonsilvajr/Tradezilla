@@ -50,7 +50,7 @@ namespace Tests.Integration
 
         protected async Task<Guid> SignUp(string document)
         {
-            var signupRequestUri = "/api/accounts/signUp";
+            var signupRequestUri = "/api/users/signUp";
             var signupJson = JsonConvert.SerializeObject(new
             {
                 Name = "John Doe",

@@ -1,6 +1,4 @@
-﻿using Domain.Exceptions;
-using Domain.Validators;
-using Domain.ValueObjects;
+﻿using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
@@ -17,7 +15,6 @@ namespace Domain.Entities
 
         public int FillQuantity { get; private set; }
         public decimal FillPrice { get; private set; }
-        public Account? Account { get; set; }
 
         public Order(
             Guid orderId, Guid accountId, string market, 

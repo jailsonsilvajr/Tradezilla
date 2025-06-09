@@ -1,21 +1,21 @@
 ﻿using Application.Ports.Driven;
 using DatabaseContext.Mappers;
 using DatabaseContext.Models;
-using Domain.Entities;
+using Domain.Aggregates;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseContext.Repositories
 {
-    public class AccountRepository : IAccountRepository
+    public class UserRepository : IUserRepository
     {
         private readonly TradezillaContext _context;
 
-        public AccountRepository(TradezillaContext context)
+        public UserRepository(TradezillaContext context)
         {
             _context = context;
         }
 
-        public void RegisterAccount(Account account)
+        public void RegisterAccount(User account)
         {
             var accountModel = AccountMapper.ToModel(account);
 
@@ -24,7 +24,7 @@ namespace DatabaseContext.Repositories
                 .Add(accountModel);
         }
 
-        public async Task<Account?> GetAccountByDocumentAsync(string document)
+        public async Task<User?> GetUserByDocumentAsync(string document)
         {
             var accountModel = await _context
                 .Accounts
@@ -43,7 +43,7 @@ namespace DatabaseContext.Repositories
                 .FirstOrDefaultAsync(a => a.AccountId == accountId);
         }
 
-        public async Task<Account?> GetAccountByAccountIdAsync(Guid accountId)
+        public async Task<User?> GetUserByAccountIdAsync(Guid accountId)
         {
             var accountModel = await GetAccountModelByAccountIdAsync(accountId);
             return accountModel is null ? null : AccountMapper.ToDomain(accountModel);
