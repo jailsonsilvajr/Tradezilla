@@ -11,6 +11,7 @@ namespace Tests.Unit.Aggregates
         [Fact]
         public void AddOrder_WithSufficientBalance_ShouldAddOrder()
         {
+            // Arrange
             var account = Account.Create(
                 "John Doe",
                 "johndoe@gmail.com",
@@ -19,7 +20,7 @@ namespace Tests.Unit.Aggregates
 
             var asset = Asset.Create(account.GetId(), "USD");
             var transaction = Transaction.Create(asset.GetId(), 1000, TransactionType.Credit);
-            asset.AddTransaction(transaction);
+            var wallet = new Wallet(account.GetId(), new() { asset }, new(), new() { transaction });
             var order = Order.Create(
                 account.GetId(),
                 "BTC/USD",
@@ -27,8 +28,10 @@ namespace Tests.Unit.Aggregates
                 1,
                 200);
 
-            var wallet = new Wallet(account.GetId(), new() { asset }, new() { order });
+            // Act
+            wallet.AddOrder(order);
 
+            // Assert
             wallet.Orders.Should().ContainSingle();
             wallet.Orders.First().Should().Be(order);
         }
@@ -49,7 +52,7 @@ namespace Tests.Unit.Aggregates
                 100,
                 200);
 
-            var wallet = new Wallet(account.GetId(), new(), new());
+            var wallet = new Wallet(account.GetId(), new(), new(), new());
 
             Assert.Throws<EntityNotFoundException>(() => wallet.AddOrder(order));
         }
@@ -65,7 +68,6 @@ namespace Tests.Unit.Aggregates
 
             var asset = Asset.Create(account.GetId(), "USD");
             var transaction = Transaction.Create(asset.GetId(), 10, TransactionType.Credit);
-            asset.AddTransaction(transaction);
 
             var order = Order.Create(
                 account.GetId(),
@@ -74,7 +76,7 @@ namespace Tests.Unit.Aggregates
                 100,
                 200);
 
-            var wallet = new Wallet(account.GetId(), new() { asset }, new());
+            var wallet = new Wallet(account.GetId(), new() { asset }, new(), new() { transaction });
 
             Assert.Throws<InsufficientBalanceException>(() => wallet.AddOrder(order));
         }
@@ -89,11 +91,44 @@ namespace Tests.Unit.Aggregates
                 "asdQWE123");
             var asset = Asset.Create(account.GetId(), "BTC");
 
-            var wallet = new Wallet(account.GetId(), new(), new());
+            var wallet = new Wallet(account.GetId(), new(), new(), new());
             wallet.AddAsset(asset);
 
             wallet.Assets.Should().ContainSingle();
             wallet.Assets.First().Should().Be(asset);
+        }
+
+        [Fact]
+        public void AddDeposit_ShouldAddDepositAndUpdateBalance()
+        {
+            // Arrange
+            var accountId = Guid.NewGuid();
+            var asset = Asset.Create(accountId, "BTC");
+            var deposit = Transaction.Create(asset.GetId(), 5, TransactionType.Credit);
+
+            // Act
+            var wallet = new Wallet(accountId, new() { asset }, new(), new() { deposit });
+
+            // Assert
+            wallet.Transactions.Should().ContainSingle();
+            asset.GetBalance().Should().Be(5);
+        }
+
+        [Fact]
+        public void AddMultipleDeposits_ShouldUpdateBalanceCorrectly()
+        {
+            // Arrange
+            var accountId = Guid.NewGuid();
+            var asset = Asset.Create(accountId, "BTC");
+            var deposit1 = Transaction.Create(asset.GetId(), 5, TransactionType.Credit);
+            var deposit2 = Transaction.Create(asset.GetId(), 2, TransactionType.Credit);
+
+            // Act
+            var wallet = new Wallet(accountId, new() { asset }, new(), new() { deposit1, deposit2 });
+
+            // Assert
+            wallet.Transactions.Should().HaveCount(2);
+            asset.GetBalance().Should().Be(7);
         }
     }
 }

@@ -69,8 +69,7 @@ namespace Tests.Unit.UseCase
 
             var asset = Asset.Create(account.GetId(), "USD");
             var transaction = Transaction.Create(asset.GetId(), placeOrderDto.Quantity, TransactionType.Credit);
-            asset.AddTransaction(transaction);
-            var wallet = new Wallet(account.GetId(), new() { asset }, new());
+            var wallet = new Wallet(account.GetId(), new() { asset }, new(), new() { transaction });
 
             _walletRepositoryMock.Setup(repo => repo.GetWalletByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(wallet);
 

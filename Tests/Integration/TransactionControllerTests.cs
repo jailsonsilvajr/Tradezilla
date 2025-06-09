@@ -25,17 +25,17 @@ namespace Tests.Integration
             var transactionContent = new StringContent(transactionJson, Encoding.UTF8, "application/json");
             await _client.PostAsync(transactionRequestUri, transactionContent);
 
-            var accountRequestUri = $"/api/accounts/getAccount?accountId={accountId}";
-            var accountResponse = await _client.GetAsync(accountRequestUri);
+            var walletRequestUri = $"/api/wallets/getWallet?accountId={accountId}";
+            var walletResponse = await _client.GetAsync(walletRequestUri);
 
-            var accountResponseContent = await accountResponse.Content.ReadAsStringAsync();
-            var accountDto = JsonConvert.DeserializeObject<AccountDto>(accountResponseContent);
+            var walletResponseContent = await walletResponse.Content.ReadAsStringAsync();
+            var walletDto = JsonConvert.DeserializeObject<WalletDto>(walletResponseContent);
 
-            Assert.NotNull(accountDto);
-            Assert.NotNull(accountDto.Assets);
-            Assert.Single(accountDto.Assets);
-            Assert.All(accountDto.Assets, asset => Assert.Equal("BTC", asset.AssetName));
-            Assert.All(accountDto.Assets, asset => Assert.Equal(10, asset.Balance));
+            Assert.NotNull(walletDto);
+            Assert.NotNull(walletDto.Assets);
+            Assert.Single(walletDto.Assets);
+            Assert.All(walletDto.Assets, asset => Assert.Equal("BTC", asset.AssetName));
+            Assert.All(walletDto.Assets, asset => Assert.Equal(10, asset.Balance));
         }
 
         [Fact]

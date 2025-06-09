@@ -6,5 +6,6 @@ namespace Application.Ports.Driven
     {
         Task<Wallet> GetWalletByAccountIdAsync(Guid accountId);
         Task RegisterOrdersAsync(Wallet wallet);
+        Task RegisterAssetAsync(Wallet wallet);
     }
 }

@@ -24,11 +24,11 @@ builder.Services.AddTransient<INotificationHandler<PlaceTradeNotification>, Plac
 builder.Services.AddSingleton<IMediator, Mediator>();
 builder.Services.AddSingleton<IBook, Book>();
 builder.Services.AddScoped<ISignUp, SignUpUseCase>();
-builder.Services.AddScoped<ICredit, CreditUseCase>();
-builder.Services.AddScoped<IDebit, DebitUseCase>();
+builder.Services.AddScoped<IPlaceTransaction, PlaceTransactionUseCase>();
 builder.Services.AddScoped<IGetAccount, GetAccountUseCase>();
 builder.Services.AddScoped<IPlaceOrder, PlaceOrderUseCase>();
 builder.Services.AddScoped<IGetDepth, GetDepthUseCase>();
+builder.Services.AddScoped<IGetWallet, GetWalletUseCase>();
 builder.Services.AddScoped<IExecuteOrder, ExecuteOrderUseCase>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
