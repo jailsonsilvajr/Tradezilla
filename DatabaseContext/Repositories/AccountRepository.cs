@@ -2,7 +2,6 @@
 using DatabaseContext.Mappers;
 using DatabaseContext.Models;
 using Domain.Entities;
-using Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseContext.Repositories
@@ -48,31 +47,6 @@ namespace DatabaseContext.Repositories
         {
             var accountModel = await GetAccountModelByAccountIdAsync(accountId);
             return accountModel is null ? null : AccountMapper.ToDomain(accountModel);
-        }
-
-        public async Task RegisterOrdersAsync(Account account)
-        {
-            AccountModel? accountModel;
-            var trackedAccountModel = _context.ChangeTracker
-                .Entries<AccountModel>()
-                .FirstOrDefault(e => e.Entity.AccountId == account.GetId());
-
-            accountModel = trackedAccountModel is null
-                ? await GetAccountModelByAccountIdAsync(account.GetId())
-                : trackedAccountModel.Entity;
-
-            if (accountModel is null)
-            {
-                throw new EntityNotFoundException($"Account with ID {account.GetId()} not found.");
-            }
-
-            var newOrdersModel = account.Orders
-                .Where(order => !accountModel.Orders.Any(orderModel => orderModel.OrderId == order.GetOrderId()))
-                .Select(order => OrderMapper.ToModel(order))
-                .ToList();
-
-
-            _context.Orders.AddRange(newOrdersModel);
         }
     }
 }

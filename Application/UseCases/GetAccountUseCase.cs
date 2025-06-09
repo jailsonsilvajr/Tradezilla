@@ -23,12 +23,7 @@ namespace Application.UseCases
                 {
                     Name = account.GetName(),
                     Email = account.GetEmail(),
-                    Document = account.GetDocument(),
-                    Assets = account.Assets.Select(d => new AssetDto
-                    {
-                        AssetName = d.GetAssetName(),
-                        Balance = d.GetBalance()
-                    }).ToList()
+                    Document = account.GetDocument()
                 };
         }
     }

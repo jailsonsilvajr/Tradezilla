@@ -21,8 +21,6 @@ namespace Tests.Unit.Entities
             account.GetEmail().Should().Be(email);
             account.GetDocument().Should().Be("58865866012");
             account.GetPassword().Should().Be(password);
-            account.Assets.Should().BeEmpty();
-            account.Orders.Should().BeEmpty();
         }
     }
 }
