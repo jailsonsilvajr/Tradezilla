@@ -32,7 +32,6 @@ builder.Services.AddScoped<IGetWallet, GetWalletUseCase>();
 builder.Services.AddScoped<IExecuteOrder, ExecuteOrderUseCase>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
