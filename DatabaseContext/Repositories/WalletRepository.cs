@@ -31,25 +31,52 @@ namespace DatabaseContext.Repositories
             var accountModel = await GetAccountModelByAccountIdAsync(accountId);
 
             return accountModel is null
-                ? throw new EntityNotFoundException($"Wallet with AccountID {accountId} not found")
+                ? throw new EntityNotFoundException($"Account {accountId} not found")
                 : WalletMapper.ToDomain(accountModel);
         }
 
-        public async Task RegisterOrdersAsync(Wallet wallet)
+        private async Task<AccountModel> GetAccountTrackedAsync(Guid accountId)
         {
             AccountModel? accountModel;
             var trackedAccountModel = _context.ChangeTracker
                 .Entries<AccountModel>()
-                .FirstOrDefault(e => e.Entity.AccountId == wallet.GetAccountId());
+                .FirstOrDefault(e => e.Entity.AccountId == accountId);
 
             accountModel = trackedAccountModel is null
-                ? await GetAccountModelByAccountIdAsync(wallet.GetAccountId())
+                ? await GetAccountModelByAccountIdAsync(accountId)
                 : trackedAccountModel.Entity;
 
             if (accountModel is null)
             {
-                throw new EntityNotFoundException($"Account with ID {wallet.GetAccountId()} not found.");
+                throw new EntityNotFoundException($"Account with ID {accountId} not found.");
             }
+
+            return accountModel;
+        }
+
+        public async Task RegisterAssetAsync(Wallet wallet)
+        {
+            var accountModel = await GetAccountTrackedAsync(wallet.GetAccountId());
+
+            var newAAssetModel = wallet.Assets
+                .Where(asset => !accountModel.Assets.Any(assetModel => assetModel.AssetId == asset.GetId()))
+                .Select(AssetMapper.ToModel)
+                .ToList();
+
+            var transactionsModel = accountModel.Assets.SelectMany(asset => asset.Transactions).ToList();
+
+            var newTransactionsModel = wallet.Transactions
+                .Where(t => !transactionsModel.Any(tm => tm.TransactionId == t.GetTransactionId()))
+                .Select(TransactionMapper.ToModel)
+                .ToList();
+
+            _context.Assets.AddRange(newAAssetModel);
+            _context.Transactions.AddRange(newTransactionsModel);
+        }
+
+        public async Task RegisterOrdersAsync(Wallet wallet)
+        {
+            var accountModel = await GetAccountTrackedAsync(wallet.GetAccountId());
 
             var newOrdersModel = wallet.Orders
                 .Where(order => !accountModel.Orders.Any(orderModel => orderModel.OrderId == order.GetOrderId()))

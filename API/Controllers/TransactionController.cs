@@ -13,12 +13,12 @@ namespace API.Controllers
     {
         [HttpPost("placeCredit")]
         public async Task<IActionResult> PlaceCredit(
-            [FromServices] ICredit _creditUseCase,
+            [FromServices] IPlaceTransaction _placeTransaction,
             [FromBody] TransactionDto transactionDto)
         {
             try
             {
-                await _creditUseCase.PlaceCreditAsync(transactionDto);
+                await _placeTransaction.PlaceTransactionAsync(transactionDto);
                 return Ok();
             }
             catch (ValidationException ex)
@@ -48,12 +48,12 @@ namespace API.Controllers
 
         [HttpPost("placeDebit")]
         public async Task<IActionResult> PlaceDebit(
-            [FromServices] IDebit _debitUseCase,
+            [FromServices] IPlaceTransaction _placeTransaction,
             [FromBody] TransactionDto transactionDto)
         {
             try
             {
-                await _debitUseCase.PlaceDebitAsync(transactionDto);
+                await _placeTransaction.PlaceTransactionAsync(transactionDto);
                 return Ok();
             }
             catch (ValidationException ex)
