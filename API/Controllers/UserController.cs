@@ -7,9 +7,9 @@ using System.Net;
 
 namespace API.Controllers
 {
-    [Route("api/accounts")]
+    [Route("api/users")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class UserController : ControllerBase
     {
         [HttpPost("signUp")]
         public async Task<IActionResult> SignUp(
@@ -39,15 +39,15 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("getAccount")]
-        public async Task<IActionResult> GetAccount(
-            [FromServices] IGetAccount _getAccount,
+        [HttpGet("getUser")]
+        public async Task<IActionResult> GetUser(
+            [FromServices] IGetUser _getUser,
             [FromQuery] Guid accountId)
         {
             try
             {
-                var account = await _getAccount.GetAccountByAccountIdAsync(accountId);
-                return Ok(account);
+                var user = await _getUser.GetUserByAccountIdAsync(accountId);
+                return Ok(user);
             }
             catch (EntityNotFoundException ex)
             {

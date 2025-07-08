@@ -1,13 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
-using Domain.ValueObjects;
 
 namespace Domain.Aggregates
 {
     public class Wallet
     {
-        private readonly ID _accountId;
+        private readonly Account _account;
         private readonly List<Asset> _assets = [];
         private readonly List<Order> _orders = [];
         private readonly List<Transaction> _transactions = [];
@@ -18,7 +17,7 @@ namespace Domain.Aggregates
 
         public Wallet(Guid accountId, List<Asset> assets, List<Order> orders, List<Transaction> transactions)
         {
-            _accountId = new ID(accountId);
+            _account = new Account(accountId);
 
             foreach (var asset in assets)
             {
@@ -36,7 +35,7 @@ namespace Domain.Aggregates
             }
         }
 
-        public Guid GetAccountId() => _accountId.GetValue();
+        public Guid GetAccountId() => _account.GetId();
 
         public void AddAsset(Asset asset)
         {
@@ -97,7 +96,7 @@ namespace Domain.Aggregates
             var asset = Assets.FirstOrDefault(a => a.GetAssetName() == assetName);
             if (asset is null)
             {
-                asset = Asset.Create(_accountId.GetValue(), assetName);
+                asset = Asset.Create(_account.GetId(), assetName);
                 _assets.Add(asset);
             }
 

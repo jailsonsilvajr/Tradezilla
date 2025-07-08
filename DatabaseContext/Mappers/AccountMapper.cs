@@ -1,29 +1,25 @@
 ﻿using DatabaseContext.Models;
-using Domain.Entities;
+using Domain.Aggregates;
 
 namespace DatabaseContext.Mappers
 {
     public static class AccountMapper
     {
-        public static AccountModel ToModel(Account account)
+        public static AccountModel ToModel(User account)
         {
             return new AccountModel
             {
-                AccountId = account.GetId(),
+                AccountId = account.GetAccountId(),
                 Name = account.GetName(),
                 Email = account.GetEmail(),
                 Document = account.GetDocument(),
-                Password = account.GetPassword(),
-                Assets = account.Assets.Select(a => AssetMapper.ToModel(a)).ToList(),
-                Orders = account.Orders.Select(o => OrderMapper.ToModel(o)).ToList()
+                Password = account.GetPassword()
             };
         }
 
-        public static Account ToDomain(AccountModel accountModel)
+        public static User ToDomain(AccountModel accountModel)
         {
-            var assets = accountModel.Assets.Select(a => AssetMapper.ToDomain(a)).ToList();
-            var orders = accountModel.Orders.Select(o => OrderMapper.ToDomain(o)).ToList();
-            return new Account(accountModel.AccountId, accountModel.Name, accountModel.Email, accountModel.Document, accountModel.Password, assets, orders);
+            return new User(accountModel.AccountId, accountModel.Name, accountModel.Email, accountModel.Document, accountModel.Password);
         }
     }
 }

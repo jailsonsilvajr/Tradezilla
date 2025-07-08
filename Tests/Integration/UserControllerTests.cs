@@ -6,12 +6,12 @@ using System.Text;
 
 namespace Tests.Integration
 {
-    public class AccountControllerTests : BaseControllerTests
+    public class UserControllerTests : BaseControllerTests
     {
         [Fact]
         public async Task MustCreateAValidAccount()
         {
-            var requestUri = "/api/accounts/signUp";
+            var requestUri = "/api/users/signUp";
             var json = JsonConvert.SerializeObject(new
             {
                 Name = "John Doe",
@@ -35,7 +35,7 @@ namespace Tests.Integration
         [Fact]
         public async Task ShouldNotCreateAnAccountWithAnInvalidData()
         {
-            var requestUri = "/api/accounts/signUp";
+            var requestUri = "/api/users/signUp";
             var json = JsonConvert.SerializeObject(new { });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -44,13 +44,13 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task MustGetAAccount()
+        public async Task MustGetAUser()
         {
             var accountId = await SignUp("65542538070");
-            var accountResponse = await _client.GetAsync($"/api/accounts/getAccount?accountId={accountId}");
+            var accountResponse = await _client.GetAsync($"/api/users/getUser?accountId={accountId}");
 
             var accountResponseContent = await accountResponse.Content.ReadAsStringAsync();
-            var accountDto = JsonConvert.DeserializeObject<AccountDto>(accountResponseContent);
+            var accountDto = JsonConvert.DeserializeObject<UserDto>(accountResponseContent);
 
             Assert.NotNull(accountDto);
         }
@@ -58,7 +58,7 @@ namespace Tests.Integration
         [Fact]
         public async Task ShoultNotGetAAccountWithInvalidId()
         {
-            var accountResponse = await _client.GetAsync($"/api/accounts/getAccount?accountId={Guid.Empty}");
+            var accountResponse = await _client.GetAsync($"/api/users/getUser?accountId={Guid.Empty}");
 
             Assert.NotNull(accountResponse);
             Assert.Equal(422, (int)accountResponse.StatusCode);
@@ -67,7 +67,7 @@ namespace Tests.Integration
             var errorResponseDto = JsonConvert.DeserializeObject<ErrorResponseDto>(responseContent);
 
             Assert.NotNull(errorResponseDto);
-            Assert.Contains($"Account {Guid.Empty} not found", errorResponseDto.ErrorMessages);
+            Assert.Contains($"User with AccountId {Guid.Empty} not found", errorResponseDto.ErrorMessages);
         }
     }
 }

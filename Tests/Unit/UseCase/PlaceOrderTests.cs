@@ -61,15 +61,11 @@ namespace Tests.Unit.UseCase
                 Price = 1000.00m
             };
 
-            var account = Account.Create(
-                    name: "John Doe",
-                    email: "johndoe@gmail.com",
-                    document: "58865866012",
-                    password: "asdQWE123");
+            var accountId = Guid.NewGuid();
 
-            var asset = Asset.Create(account.GetId(), "USD");
+            var asset = Asset.Create(accountId, "USD");
             var transaction = Transaction.Create(asset.GetId(), placeOrderDto.Quantity, TransactionType.Credit);
-            var wallet = new Wallet(account.GetId(), new() { asset }, new(), new() { transaction });
+            var wallet = new Wallet(accountId, new() { asset }, new(), new() { transaction });
 
             _walletRepositoryMock.Setup(repo => repo.GetWalletByAccountIdAsync(placeOrderDto.AccountId)).ReturnsAsync(wallet);
 

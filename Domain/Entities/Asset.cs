@@ -10,8 +10,6 @@ namespace Domain.Entities
         private readonly AssetName _assetName;
         private Balance _balance;
 
-        public Account? Account { get; set; }
-
         public Asset(Guid assetId, Guid accountId, string assetName)
         {
             _assetId = new ID(assetId);
